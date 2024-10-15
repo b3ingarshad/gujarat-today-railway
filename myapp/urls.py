@@ -15,7 +15,7 @@ urlpatterns = [
     path('submit-feedback/', feedback_view, name='feedback'),
     path("contact/", views.contact, name="contact"),
     path('trending-news/', trending_news_page, name='trending_news_page'),
-    path('top-stories/', lambda request: dynamic_page_view(request, 'top-stories.html')),
+    path('top-stories/', lambda request: dynamic_page_view(request, 'categorys-dynamic-page.html',category_name="Top Stories")),
     path('epaper-daily/', epaper_view, name='epaper_view'),
     path('lokhit-movement/', lokhitmovement_view, name='lokhitmovement_view'),
     path('subscribe/', subscribe, name='subscribe'),

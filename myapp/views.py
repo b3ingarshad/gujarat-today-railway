@@ -234,8 +234,6 @@ def trending_news_page(request):
     })
     # return render(request, 'trending-stories.html')
 
-
-
 def search_news(request):
     logo = SiteLogo.objects.all()
     query = request.GET.get('q')
@@ -329,11 +327,14 @@ def dynamic_page_view(request, template_name, category_name):
     logo = SiteLogo.objects.all()
     categories = Category.objects.all()
 
-    category = get_object_or_404(Category, name=category_name)
-
-    # Filter news queryset by the selected category
-    news_queryset = New.objects.filter(category=category).order_by('-date')
-
+    if category_name == "Top Stories":
+        news_queryset = New.objects.all().order_by('-date')
+        category = None  # No specific category for "Top Stories"
+    else:
+        # Filter news by the selected category
+        category = get_object_or_404(Category, name=category_name)
+        news_queryset = New.objects.filter(category=category).order_by('-date')
+        
     # Pagination
     items_per_page = 12  # Number of items per page
     paginator = Paginator(news_queryset, items_per_page)
