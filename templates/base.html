@@ -614,7 +614,7 @@
 			// Loop through the fetched data and generate the nav links
 			data.forEach(navItem => {
 				const listItem = document.createElement('li');
-				listItem.innerHTML = `<a href="${navItem.url}">${navItem.name}</a>`;
+				listItem.innerHTML = `<a href="/${navItem.url}">${navItem.name}</a>`;
 				navLinksContainer.appendChild(listItem);
 			});
 		})
