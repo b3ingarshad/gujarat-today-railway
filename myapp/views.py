@@ -176,9 +176,9 @@ def contact(request):
         try:
             # Save to database
             obj.save()
-            messages.success(request, 'Your contact has been submitted successfully!')
+            messages.success(request, 'Your message has been submitted successfully!')
         except IntegrityError:
-            messages.error(request, 'This contact is already subscribed.')
+            messages.error(request, 'This messages is already subscribed.')
             
         return redirect(request.META.get('HTTP_REFERER', 'index'))  # Redirect back to the referring page
 
