@@ -13,19 +13,19 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 import os
-
+BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'postgres',                  # Your actual database user (often 'postgres')
-        'PASSWORD': 'Arshad786',  # Your actual database password
-      
+        'USER': 'postgres',                 
+        'PASSWORD': 'Arshad786',  
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
