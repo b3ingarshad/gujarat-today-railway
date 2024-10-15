@@ -30,6 +30,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [ 'gujarat-today-railway-production.up.railway.app','localhost', '127.0.0.1'] 
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://gujarat-today-railway-production.up.railway.app',  # Add your Railway URL
+]
 
 # Application definition
 
