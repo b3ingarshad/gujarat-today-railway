@@ -21,23 +21,24 @@
 <!-- Category-wise news section -->
 <section class="section-gap section-gap-top__with-text trending-stories">
     <div class="container">
-        <div class="row" id="hateCrime">
+        <div class="row" id="dynamicPageOfCategory">
             <!-- Fetched news items will be inserted here dynamically -->
         </div>
     </div>
     <!-- Pagination controls -->
-<div id="paginationControls" class="text-center mt-4">
-    <button id="prevPage" class="btn btn-primary" style="display: none;">&laquo; Previous</button>
-    <span id="pageNumbers" class="mx-2"></span>
-    <button id="nextPage" class="btn btn-primary" style="display: none;">Next &raquo;</button>
-</div>
-
+    {% if page_obj.paginator.count > 12 %} <!-- Only show pagination if more than 10 items -->
+    <div id="paginationControls" class="text-center mt-4">
+        <button id="prevPage" class="btn btn-primary" style="display: none;">&laquo; Previous</button>
+        <span id="pageNumbers" class="mx-2"></span>
+        <button id="nextPage" class="btn btn-primary" style="display: none;">Next &raquo;</button>
+    </div>
+{% endif %}
 </section>
 
 <!-- Script to load news dynamically based on the selected category -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const topHateCrime = document.getElementById('hateCrime');
+        const topDynamicPageOfCategory = document.getElementById('dynamicPageOfCategory');
 //        const newsList = JSON.parse('{{ news_list_json|safe }}');
         const currentPage = parseInt('{{ page_obj.number }}');
         const totalPages = parseInt('{{ page_obj.paginator.num_pages }}');
@@ -46,7 +47,7 @@
 
         // Function to render news articles
         function renderNews(newsList) {
-            topHateCrime.innerHTML = '';  // Clear the container
+            topDynamicPageOfCategory.innerHTML = '';  // Clear the container
 
             newsList.forEach(article => {
                 const articleDate = new Date(article.date);
@@ -83,10 +84,9 @@
                         </div>
                     </div>
                 `;
-                topHateCrime.innerHTML += articleHTML;
+                topDynamicPageOfCategory.innerHTML += articleHTML;
             });
         }
-console.log("Current Page:", currentPage, "Total Pages:", totalPages, "News List:", newsList);
 
         // Render the news on page load
         renderNews(newsList);

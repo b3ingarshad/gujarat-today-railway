@@ -26,6 +26,20 @@
                             <button type="submit" class="btn btn-primary btn-small">SUBSCRIBE</button>
                         </div>
                     </form>
+                    {% if messages %}
+						<script>
+							$(document).ready(function() {
+								{% for message in messages %}
+									Swal.fire({
+										title: '{% if message.tags == "error" %}Error!{% else %}Success!{% endif %}',
+										text: '{{ message|escapejs }}',
+										icon: '{% if message.tags == "error" %}error{% else %}success{% endif %}',
+										confirmButtonText: 'Okay'
+									});
+								{% endfor %}
+							});
+						</script>
+					{% endif %}
                     <!-- End of .subscription-form -->
                 </div>
                 <!-- End of .subscription-form-wrapper -->
@@ -47,7 +61,7 @@
             <div class="category-carousel owl-carousel inner-category-design" id="rushan">
                 {% for category in categories %}
                 <div class="category-list perfect-square">
-                    <a href="#" class="list-inner" style="background-image: url('{{ category.image.url }}'); background-size: cover;">
+                    <a href="/{{category.category_url}}" class="list-inner" style="background-image: url('{{ category.image.url }}'); background-size: cover;">
                         <div class="post-info-wrapper overlay">
                             <div class="counter-inner"><span class="counter">{{ category.new_set.count }}</span>+
                             </div>

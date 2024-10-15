@@ -63,7 +63,7 @@
 				<div id="rushan" class="owl-carousel category-list-wrapper">
 					{% for category in categories %}
 					<div class="category-list perfect-square">
-						<a href="{{ category.category_url }}" class="list-inner"
+						<a href="/{{ category.category_url }}" class="list-inner"
 							style="background-image: url('{{ category.image.url }}'); background-size: cover; width: 80%; margin: auto; height: 80%;">
 							<div class="post-info-wrapper overlay">
 								<div class="counter-inner"><span class="category_count">{{ category.new_set.count }}</span>+
@@ -262,7 +262,7 @@
 							<p class="m-b-xs-20">Be the first to know when we launch.
 								<br>New Updates & Notifications
 							</p>
-						</div>
+						</div> 
 						<!-- End of .section-title -->
 						<div class="subscription-form-wrapper">
 							<form method="post" action="{% url 'subscribe' %}" class="subscription-form row no-gutters">
@@ -277,6 +277,21 @@
 							</form>
 							<!-- End of .subscription-form -->
 						</div>
+						{% if messages %}
+						<script>
+							$(document).ready(function() {
+								{% for message in messages %}
+									Swal.fire({
+										title: '{% if message.tags == "error" %}Error!{% else %}Success!{% endif %}',
+										text: '{{ message|escapejs }}',
+										icon: '{% if message.tags == "error" %}error{% else %}success{% endif %}',
+										confirmButtonText: 'Okay'
+									});
+								{% endfor %}
+							});
+						</script>
+					{% endif %}
+					
 						<!-- End of .subscription-form-wrapper -->
 
 						<div class="contact-social-share m-t-xs-20">
@@ -342,9 +357,5 @@
         });
     });
 </script>
-
-
-
-
 
 {% endblock %}

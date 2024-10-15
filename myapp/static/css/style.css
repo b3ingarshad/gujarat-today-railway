@@ -4344,7 +4344,7 @@ input[type="radio"] + label::after {
 .form-group label {
   position: absolute;
   top: 1.4rem;
-  left: 1.2rem;
+  left: 2.2rem;
   pointer-events: none;
   z-index: 9;
   background: #fff;

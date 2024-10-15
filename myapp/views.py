@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
+from django.db import IntegrityError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics
@@ -172,19 +173,30 @@ def contact(request):
 
         # Save to database
         obj.save()
-        messages.success(request, 'Your Feedback is Submitted Successfully')
-        return HttpResponse("Feedback submitted successfully")
-    return render(request, 'contact.html', {'logo': logo})
+        try:
+            # Save to database
+            obj.save()
+            messages.success(request, 'Your contact has been submitted successfully!')
+        except IntegrityError:
+            messages.error(request, 'This contact is already subscribed.')
+            
+        return redirect(request.META.get('HTTP_REFERER', 'index'))  # Redirect back to the referring page
+
+    return render(request, 'contact.html', {'logo': logo}) 
 
 def subscribe(request):
     if request.method == 'POST':
-        obj = Subscription()
-        obj.email = request.POST.get('subscription-email')
-        print("Subscription Name :", obj.email)
+        email = request.POST.get('subscription-email')
+        obj = Subscription(email=email)
 
-        obj.save()
-        messages.success(request, 'Your Subscription is Submitted Successfully')
-        return HttpResponse("Feedback submitted successfully")
+        try:
+            obj.save()
+            messages.success(request, 'Your subscription has been submitted successfully!')
+           
+        except IntegrityError:
+            messages.error(request, 'This email is already subscribed.')
+           
+        return redirect(request.META.get('HTTP_REFERER', 'index'))
     return render(request, 'index.html')
 
 

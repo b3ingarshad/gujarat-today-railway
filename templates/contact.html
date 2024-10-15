@@ -76,22 +76,22 @@
 						<form method="post" class="" action="{% url 'contact' %}">
 							{% csrf_token %}
 							<div class="form-group form-group-small col-12">
-								<label for="contact-name">Name</label>
+								<label for="contact-name">Name *</label>
 								<input type="text" name="contact-name" id="name" required>
 							</div>
 
 							<div class="form-group form-group-small col-12">
-								<label for="contact-phone">Phone</label>
+								<label for="contact-phone">Phone *</label>
 								<input type="text" name="contact-phone" id="phone" required>
 							</div>
 
 							<div class="form-group form-group-small col-12">
-								<label for="contact-email">Email</label>
+								<label for="contact-email">Email *</label>
 								<input type="email" name="contact-email" id="email" required>
 							</div>
 
 							<div class="form-group form-group-small col-12">
-								<label for="contact-message">Message</label>
+								<label for="contact-message">Message *</label>
 								<textarea name="contact-message" id="message" required></textarea>
 							</div>
 
@@ -99,6 +99,20 @@
 								<button class="btn btn-primary btn-small m-t-xs-0 m-t-lg-20 w-100 text-uppercase" style="border-radius: 5px;" type="submit">Sumit</button>
 							</div>
 						</form>
+						{% if messages %}
+						<script>
+							$(document).ready(function() {
+								{% for message in messages %}
+									Swal.fire({
+										title: '{% if message.tags == "error" %}Error!{% else %}Success!{% endif %}',
+										text: '{{ message|escapejs }}',
+										icon: '{% if message.tags == "error" %}error{% else %}success{% endif %}',
+										confirmButtonText: 'Okay'
+									});
+								{% endfor %}
+							});
+						</script>
+					{% endif %}
 						<!-- End of .axil-contact-form -->
 
 						

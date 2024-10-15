@@ -67,7 +67,7 @@ fetch('/api/navbar/')
     })
     .finally(() => {
         // Delay hiding the loader for 3 seconds
-        setTimeout(hideLoader, 1000);
+        setTimeout(hideLoader);
     });
 
 
@@ -208,7 +208,7 @@ fetch('/api/topnews/')
     })
     .finally(() => {
         // Delay hiding the loader for 3 seconds
-        setTimeout(hideLoader, 1000);
+        setTimeout(hideLoader);
     });
 
 
@@ -373,7 +373,7 @@ fetch('/api/news/')
     })
     .finally(() => {
         // Delay hiding the loader for 3 seconds
-        setTimeout(hideLoader, 1000);
+        setTimeout(hideLoader);
     });
 
 
@@ -449,7 +449,7 @@ document.getElementById('load-more-btn').addEventListener('click', function () {
         })
         .finally(() => {
             // Delay hiding the loader for 3 seconds
-            setTimeout(hideLoader, 1000);
+            setTimeout(hideLoader);
         });
 });
 
