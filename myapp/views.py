@@ -50,7 +50,6 @@ def index(request):
 
     return render(request, 'index.html', {'logo': logo, 'news_list': news_list, 'categories': categories,'epaper': epaper})
 
-
 def news_list(request):
     news_queryset = New.objects.all()  # Assuming you have a News model
     paginator = Paginator(news_queryset, 10)  # Show 10 news items per page
@@ -112,20 +111,33 @@ def topnews_detail_view(request, id):
         'related_news': related_news  # Related news articles
     })
 
-
 def epaper_view(request):
     logo = SiteLogo.objects.all()
-    epaper = EpaperDaily.objects.all()
-    print("All paper", epaper)
-    return render(request, 'e-papers.html', {'logo': logo, 'epaper': epaper})
+    epaper_queryset = EpaperDaily.objects.all()
 
+    # Pagination
+    items_per_page = 12  # Adjust the number of items per page if needed
+    paginator = Paginator(epaper_queryset, items_per_page)
+    page_number = request.GET.get('page', 1)  # Get current page number from request
+    page_obj = paginator.get_page(page_number)
 
+    return render(request, 'e-papers.html', {
+        'logo': logo,
+        'epaper': page_obj  # Pass the paginated object to the template
+    })
+    
 def lokhitmovement_view(request):
     logo = SiteLogo.objects.all()
     lokhitmovement = Lokhitmovement.objects.all()
+    
+     # Pagination
+    items_per_page = 12  # Adjust the number of items per page if needed
+    paginator = Paginator(lokhitmovement, items_per_page)
+    page_number = request.GET.get('page', 1)  # Get current page number from request
+    page_obj = paginator.get_page(page_number)
+    
     print("All lokhitmovement", lokhitmovement)
-    return render(request, 'lokhit-movement.html', {'logo': logo, 'lokhitmovement': lokhitmovement})
-
+    return render(request, 'lokhit-movement.html', {'logo': logo, 'lokhitmovement': page_obj})
 
 def feedback_view(request):
     if request.method == 'POST':
@@ -145,10 +157,14 @@ def feedback_view(request):
         print("Mobile Number:", obj.mobile_number)
         print("Comment:", obj.comment_message)
 
-        # Save to database
-        obj.save()
-        messages.success(request, 'Your Feedback is Submitted Successfully')
-        return HttpResponse("Feedback submitted successfully")
+        try:
+            # Save to database
+            obj.save()
+            messages.success(request, 'Your feedback has been submitted successfully!')
+        except IntegrityError:
+            messages.error(request, 'This feedback is already subscribed.')
+            
+        return redirect(request.META.get('HTTP_REFERER', 'index'))  # Redirect back to the 
     
     return render(request, 'news-details.html')
 
@@ -199,41 +215,41 @@ def subscribe(request):
         return redirect(request.META.get('HTTP_REFERER', 'index'))
     return render(request, 'index.html')
 
-
 def trending_news_page(request):
     logo = SiteLogo.objects.all()
     epaper = EpaperDaily.objects.all()
     categories = Category.objects.all()
-    news_queryset = New.objects.filter(is_trending=True)  # Only get trending news
-    paginator = Paginator(news_queryset, 10)  # Show 10 news items per page
-    page_number = request.GET.get('page', 1)
-    news_list = paginator.get_page(page_number)
+    news_queryset = New.objects.filter(is_trending=True)  # Fetch all trending news
 
-    # Serialize news_list to JSON
-    news_list_json = json.dumps([
-        {
-            "id": news.id,
-            "category": news.category.name,
-            "category_color": news.category.color,
-            "category_url": news.category.category_url,
-            "date": news.date.strftime("%Y-%m-%d"),
-            "title": news.title,
-            "author": news.author,
-            "description": news.description,
-            "image": news.image.url,
-            "is_trending": news.is_trending,
-        }
-        for news in news_list
-    ])
+    # Pagination
+    items_per_page = 12  # Number of items per page
+    paginator = Paginator(news_queryset, items_per_page)
+    
+    page_number = request.GET.get('page', 1)  # Default to first page if not provided
+    page_obj = paginator.get_page(page_number)
+
+    # Serialize the current page's news_queryset to JSON
+    news_list_json = json.dumps([{
+        "id": news.id,
+        "category": news.category.name,
+        "category_url": news.category.category_url,
+        "category_color": news.category.color,
+        "date": news.date.strftime("%Y-%m-%d"),
+        "title": news.title,
+        "author": news.author,
+        "description": news.description,
+        "image": news.image.url if news.image else None,
+        "is_trending": news.is_trending,
+    } for news in page_obj])
 
     return render(request, 'trending-stories.html', {
         'logo': logo,
         'news_list_json': news_list_json,  # Pass serialized JSON to the template
         'categories': categories,
-        'epaper': epaper
+        'epaper': epaper,
+        'page_obj': page_obj
     })
-    # return render(request, 'trending-stories.html')
-
+    
 def search_news(request):
     logo = SiteLogo.objects.all()
     query = request.GET.get('q')
@@ -336,14 +352,12 @@ def dynamic_page_view(request, template_name, category_name):
         news_queryset = New.objects.filter(category=category).order_by('-date')
         
     # Pagination
-    items_per_page = 12  # Number of items per page
+    items_per_page = 2  # Number of items per page
     paginator = Paginator(news_queryset, items_per_page)
     
     page_number = request.GET.get('page', 1)  # Default to first page if not provided
     page_obj = paginator.get_page(page_number)
-    print(f"Items on this page: {len(page_obj)}")
 
-    print(f"Total items: {news_queryset.count()}, Current page: {page_obj.number}, Items on page: {len(page_obj)}")
     # Serialize the current page's news_queryset to JSON
     news_list_json = json.dumps([{
         "id": news.id,
@@ -366,3 +380,4 @@ def dynamic_page_view(request, template_name, category_name):
         'selected_category': category,
         'category_name':category_name
     })
+    

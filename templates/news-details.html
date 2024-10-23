@@ -128,7 +128,20 @@
 									style="border-radius: 5px;">POST FEEBACK</button>
 							</div>
 						</form>
-
+						{% if messages %}
+						<script>
+							$(document).ready(function() {
+								{% for message in messages %}
+									Swal.fire({
+										title: '{% if message.tags == "error" %}Error!{% else %}Success!{% endif %}',
+										text: '{{ message|escapejs }}',
+										icon: '{% if message.tags == "error" %}error{% else %}success{% endif %}',
+										confirmButtonText: 'Okay'
+									});
+								{% endfor %}
+							});
+						</script>
+					{% endif %}
 						<!-- <div class="post-navigation-wrapper row  m-b-xs-60">
 							<div class="post-navigation col-lg-6">
 								<div class="post-nav-content">

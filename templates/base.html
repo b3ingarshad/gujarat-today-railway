@@ -326,7 +326,7 @@
 			
 			<!-- End of .header-top -->
 			<nav class="navbar">
-				<div class="container">
+				<div class="container-fluid">
 					<div class="navbar-inner">
 						
 <!-- <button onclick="toggleDarkMode()">Toggle Dark Mode</button> -->
@@ -371,6 +371,8 @@
 								<span class="slider"></span>
 								<span class="decoration"></span>
 							</label>
+
+							<div id="google_translate_element"></div>
 							  
 							
 						</div>
@@ -639,6 +641,27 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
+
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',  // The default language of the page
+            includedLanguages: 'en,gu,hi,ml,ur,ar,mr,bn,te',  // List of languages
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+        
+        // Programmatically set the default language to Gujarati
+        setTimeout(function() {
+            var select = document.querySelector('.skiptranslate select');
+            if (select) {
+                select.value = 'en'; // Set to Gujarati
+                select.dispatchEvent(new Event('change')); // Trigger change event
+            }
+        }, 500); // Adjust the timeout if necessary
+    }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 
 
 

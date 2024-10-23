@@ -52,15 +52,61 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>z
+                        </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
 
         </div>
-    </div>
 
+
+    {% if lokhitmovement.paginator.num_pages > 1 %} <!-- Show pagination if more than one page -->
+        <div id="paginationControls" class="text-center mt-4">
+            <button id="prevPage" class="btn btn-primary" {% if not lokhitmovement.has_previous %} style="display: none;" {% endif %}>
+                &laquo; Previous
+            </button>
+            <span id="pageNumbers" class="mx-2"></span> <!-- Container for page buttons -->
+            <button id="nextPage" class="btn btn-primary" {% if not lokhitmovement.has_next %} style="display: none;" {% endif %}>
+                Next &raquo;
+            </button>
+        </div>
+        {% endif %}
+    </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const totalPages = {{ lokhitmovement.paginator.num_pages }}; // Total number of pages from Django context
+        const currentPage = {{ lokhitmovement.number }}; // Current page from Django context
+        const pageNumbersContainer = document.getElementById('pageNumbers');
+        
+        // Clear existing page numbers (if any)
+        pageNumbersContainer.innerHTML = '';
+
+        // Create buttons for each page
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            pageButton.className = 'btn btn-secondary mx-1';
+            pageButton.disabled = (i === currentPage);  // Disable current page button
+
+            // Add click event to load the respective page
+            pageButton.addEventListener('click', function () {
+                window.location.href = `?page=${i}&lokhitmovement`;
+            });
+
+            pageNumbersContainer.appendChild(pageButton);
+        }
+         // Pagination button event listeners
+         document.getElementById('prevPage').addEventListener('click', function () {
+            window.location.href = `?page=${currentPage - 1}&lokhitmovement`;
+        });
+
+        document.getElementById('nextPage').addEventListener('click', function () {
+            window.location.href = `?page=${currentPage + 1}&lokhitmovement`;
+        });
+    });
+</script>
 
 {% endblock %}

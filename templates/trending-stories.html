@@ -12,75 +12,112 @@
                 <div class="post-title-wrapper">
                     <h2 class="m-b-xs-0 axil-post-title hover-line">Trending Stories</h2>
                 </div>
-                <!-- End of .post-title-wrapper -->
             </div>
-            <!-- End of .col-lg-8 -->
         </div>
     </div>
-    <!-- End of .container -->
 </section>
-<!-- End of .banner -->
 
+<!-- Trending Stories Section -->
 <section class="section-gap section-gap-top__with-text trending-stories">
     <div class="container">
-
         <div id="trendingNewsContainer" class="row">
             <!-- News articles will be dynamically inserted here -->
         </div>
+
+        <!-- Pagination Section: Only show if more than 12 items -->
+        {% if page_obj.paginator.count > 12 %} <!-- Only show pagination if more than 10 items -->
+        <div id="paginationControls" class="text-center mt-4">
+            <button id="prevPage" class="btn btn-primary" style="display: none;">&laquo; Previous</button>
+            <span id="pageNumbers" class="mx-2"></span>
+            <button id="nextPage" class="btn btn-primary" style="display: none;">Next &raquo;</button>
+        </div>
+    {% endif %}
     </div>
 </section>
-
-<!-- End of .trending-stories -->
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const trendingNewsContainer = document.getElementById('trendingNewsContainer');
+        const currentPage = parseInt('{{ page_obj.number }}');
+        const totalPages = parseInt('{{ page_obj.paginator.num_pages }}');
+        const category_name = "{{ category_name|escapejs }}";
+        const newsList = JSON.parse('{{ news_list_json|escapejs }}');      
 
-        // Parse the JSON object passed from Django
-        const newsList = JSON.parse('{{ news_list_json|escapejs }}'); // Use escapejs for safety
+        // Populate the news articles
+        function renderNews() {
+            trendingNewsContainer.innerHTML = '';
+            newsList.forEach(article => {
+                const articleDate = new Date(article.date);
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                const formattedDate = articleDate.toLocaleDateString('en-US', options);
 
-        trendingNewsContainer.innerHTML = ''; // Clear existing content
-        newsList.forEach(article => {
-            // Convert article.date to a JavaScript Date object
-            const articleDate = new Date(article.date);
-
-            // Format the date to "M d, Y" (e.g., "Oct 08, 2024")
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            const formattedDate = articleDate.toLocaleDateString('en-US', options);
-            const articleHTML = `
-                <div class="col-lg-4">
-                    <div class="axil-img-container m-b-xs-30">
-                        <a href="/news/${article.id}" class="d-block">
-                            <img src="${article.image}" alt="${article.title}" class="w-100">
-                            <div class="grad-overlay"></div>
-                        </a>
-                        <div class="media post-block position-absolute">
-                            <div class="media-body">
-                                <div class="post-cat-group m-b-xs-10">
-                                    <a href="/${article.category_url}" class="post-cat cat-btn " style="background-color: ${article.category_color}">
-                                        ${article.category}
-                                    </a>
-                                </div>
-                                <div class="axil-media-bottom">
-                                    <h3 class="axil-post-title hover-line hover-line">
-                                        <a href="/news/${article.id}">${article.title}</a>
-                                    </h3>
-                                    <div class="post-metas">
-                                        <ul class="list-inline">
-                                            <li>By <a href="#" class="post-author">${article.author}</a></li>
-                                            <li><i class="dot">.</i> ${formattedDate}</li>
-                                        </ul>
+                const articleHTML = `
+                    <div class="col-lg-4">
+                        <div class="axil-img-container m-b-xs-30">
+                            <a href="/news/${article.id}" class="d-block">
+                                <img src="${article.image}" alt="${article.title}" class="w-100">
+                                <div class="grad-overlay"></div>
+                            </a>
+                            <div class="media post-block position-absolute">
+                                <div class="media-body">
+                                    <div class="post-cat-group m-b-xs-10">
+                                        <a href="/${article.category_url}" class="post-cat cat-btn" style="background-color: ${article.category_color}">
+                                            ${article.category}
+                                        </a>
+                                    </div>
+                                    <div class="axil-media-bottom">
+                                        <h3 class="axil-post-title hover-line hover-line">
+                                            <a href="/news/${article.id}">${article.title}</a>
+                                        </h3>
+                                        <div class="post-metas">
+                                            <ul class="list-inline">
+                                                <li>By <a href="#" class="post-author">${article.author}</a></li>
+                                                <li><i class="dot">.</i> ${formattedDate}</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
-            trendingNewsContainer.innerHTML += articleHTML;
-        });
-    });
-</script>
+                `;
+                trendingNewsContainer.innerHTML += articleHTML;
+            });
+        }
 
+
+        // Initialize the page with news content and pagination
+        renderNews();
+         // Show/hide pagination controls based on current page
+         document.getElementById('prevPage').style.display = currentPage > 1 ? 'inline-block' : 'none';
+         document.getElementById('nextPage').style.display = currentPage < totalPages ? 'inline-block' : 'none';
+ 
+         // Generate pagination numbers
+         const pageNumbersContainer = document.getElementById('pageNumbers');
+         for (let i = 1; i <= totalPages; i++) {
+             const pageButton = document.createElement('button');
+             pageButton.textContent = i;
+             pageButton.className = 'btn btn-secondary mx-1';
+             pageButton.disabled = (i === currentPage);  // Disable current page button
+ 
+             // Add click event to load the respective page
+             pageButton.addEventListener('click', function () {
+                 window.location.href = `?page=${i}&category=${category_name}`;
+             });
+ 
+             pageNumbersContainer.appendChild(pageButton);
+         }
+ 
+         // Pagination button event listeners
+         document.getElementById('prevPage').addEventListener('click', function () {
+             window.location.href = `?page=${currentPage - 1}&category=${category_name}`;
+         });
+ 
+         document.getElementById('nextPage').addEventListener('click', function () {
+             window.location.href = `?page=${currentPage + 1}&category=${category_name}`;
+         });
+
+     });
+</script>
 
 {% endblock %}

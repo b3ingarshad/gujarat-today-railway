@@ -2792,6 +2792,7 @@ body {
   font-family: var(--primary-font);
   font-size: 1.6rem;
   line-height: 1.7;
+  top: 0 !important;
   margin: 0;
   padding: 0;
   color: var(--grey-dark-two);
@@ -8561,4 +8562,21 @@ body.dark-mode p {
 
 .dark-section-bg .btn-link{
   color: white !important;
+}
+
+.skiptranslate iframe {
+  display: none !important;
+}
+.skiptranslate .goog-te-gadget-icon{
+  display: none !important;
+}
+
+.skiptranslate .goog-te-gadget-simple{
+  border: 1px solid;
+  border-radius: 6px;
+  height: 30px;
+  min-width: 90px;
+  max-width: 160px;
+  margin: 20px;
+  padding: 4px;
 }
