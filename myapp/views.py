@@ -352,7 +352,7 @@ def dynamic_page_view(request, template_name, category_name):
         news_queryset = New.objects.filter(category=category).order_by('-date')
         
     # Pagination
-    items_per_page = 2  # Number of items per page
+    items_per_page = 12  # Number of items per page
     paginator = Paginator(news_queryset, items_per_page)
     
     page_number = request.GET.get('page', 1)  # Default to first page if not provided

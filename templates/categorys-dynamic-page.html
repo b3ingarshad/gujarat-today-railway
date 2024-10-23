@@ -37,68 +37,13 @@
 
 <!-- Script to load news dynamically based on the selected category -->
 <script>
-    function renderPagination(currentPage, totalPages) {
-        const pageNumbersContainer = document.getElementById('pageNumbers');
-        pageNumbersContainer.innerHTML = '';  // Clear previous pagination buttons
-    
-        const createPageButton = (pageNum, isActive = false) => {
-            const pageButton = document.createElement('button');
-            pageButton.textContent = pageNum;
-            pageButton.className = `btn btn-secondary mx-1${isActive ? ' active' : ''}`;
-            pageButton.disabled = isActive;
-    
-            // Add click event to load the respective page
-            if (!isActive) {
-                pageButton.addEventListener('click', function () {
-                    window.location.href = `?page=${pageNum}&category=${category_name}`;
-                });
-            }
-    
-            return pageButton;
-        };
-    
-        const addEllipsis = () => {
-            const ellipsis = document.createElement('span');
-            ellipsis.textContent = '...';
-            ellipsis.className = 'mx-2';
-            pageNumbersContainer.appendChild(ellipsis);
-        };
-    
-        // Always show the first page
-        pageNumbersContainer.appendChild(createPageButton(1, currentPage === 1));
-    
-        // Show ellipsis if currentPage is greater than 3
-        if (currentPage > 3) {
-            addEllipsis();
-        }
-    
-        // Define the range of visible pages (dynamic based on the current page)
-        const startPage = Math.max(2, currentPage - 1);
-        const endPage = Math.min(totalPages - 1, currentPage + 1);
-    
-        // Show the current page and the neighboring pages
-        for (let i = startPage; i <= endPage; i++) {
-            pageNumbersContainer.appendChild(createPageButton(i, i === currentPage));
-        }
-    
-        // Show ellipsis if currentPage is less than totalPages - 2
-        if (currentPage < totalPages - 2) {
-            addEllipsis();
-        }
-    
-        // Always show the last page
-        if (totalPages > 1) {
-            pageNumbersContainer.appendChild(createPageButton(totalPages, currentPage === totalPages));
-        }
-    }
     document.addEventListener('DOMContentLoaded', function () {
         const topDynamicPageOfCategory = document.getElementById('dynamicPageOfCategory');
 //        const newsList = JSON.parse('{{ news_list_json|safe }}');
         const currentPage = parseInt('{{ page_obj.number }}');
         const totalPages = parseInt('{{ page_obj.paginator.num_pages }}');
         const category_name = "{{ category_name|escapejs }}";
-        const newsList = JSON.parse('{{ news_list_json|escapejs }}');       
-        renderPagination(currentPage, totalPages);
+        const newsList = JSON.parse('{{ news_list_json|escapejs }}');    
         // Function to render news articles
         function renderNews(newsList) {
             topDynamicPageOfCategory.innerHTML = '';  // Clear the container
