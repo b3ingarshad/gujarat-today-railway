@@ -26,26 +26,33 @@
         </div>
     </div>
     <!-- Pagination controls -->
-    {% if page_obj.paginator.count > 12 %} <!-- Only show pagination if more than 10 items -->
+    <!-- {% if page_obj.paginator.count > 12 %} 
     <div id="paginationControls" class="text-center mt-4">
         <button id="prevPage" class="btn btn-primary" style="display: none;">&laquo; Previous</button>
         <span id="pageNumbers" class="mx-2"></span>
         <button id="nextPage" class="btn btn-primary" style="display: none;">Next &raquo;</button>
     </div>
-{% endif %}
-</section>
+{% endif %} -->
+{% if page_obj.paginator.num_pages > 1 %}
 
-<!-- Script to load news dynamically based on the selected category -->
+<div class="pagination">
+    <ul> <!--pages or li are comes from javascript --> </ul>
+  </div>
+  {% endif %}
+
+</section>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const topDynamicPageOfCategory = document.getElementById('dynamicPageOfCategory');
-//        const newsList = JSON.parse('{{ news_list_json|safe }}');
+        // Selecting required element
+        const element = document.querySelector(".pagination ul");
         const currentPage = parseInt('{{ page_obj.number }}');
         const totalPages = parseInt('{{ page_obj.paginator.num_pages }}');
         const category_name = "{{ category_name|escapejs }}";
-        const newsList = JSON.parse('{{ news_list_json|escapejs }}');    
+        const newsList = JSON.parse('{{ news_list_json|escapejs }}');
+
         // Function to render news articles
         function renderNews(newsList) {
+            const topDynamicPageOfCategory = document.getElementById('dynamicPageOfCategory');
             topDynamicPageOfCategory.innerHTML = '';  // Clear the container
 
             newsList.forEach(article => {
@@ -68,7 +75,7 @@
                                         </a>
                                     </div>
                                     <div class="axil-media-bottom">
-                                        <h3 class="axil-post-title hover-line hover-line">
+                                        <h3 class="axil-post-title hover-line">
                                             <a href="/news/${article.id}">${article.title}</a>
                                         </h3>
                                         <div class="post-metas">
@@ -87,38 +94,77 @@
             });
         }
 
-        // Render the news on page load
-        renderNews(newsList);
+        // Function to create pagination
+        function createPagination(totalPages, currentPage) {
+            element.innerHTML = ''; // Clear existing pagination
+            let liTag = '';
+            let active;
+            let beforePage = currentPage - 1;
+            let afterPage = currentPage + 1;
+        
+            // Previous button
+            if (currentPage > 1) {
+                liTag += `<li class="btn prev" onclick="navigateToPage(${currentPage - 1})"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
+            }
+        
+            // First page
+            if (currentPage > 2) {
+              
+                if (currentPage > 3) {
+                    liTag += `<li class="dots"><span>...</span></li>`;
+                }
+            }
+        
+            // Adjust the range for the current page display
+            if (currentPage === totalPages) {
+                beforePage = Math.max(1, beforePage - 2); // Show 2 pages before the last page
+            } else if (currentPage === totalPages - 1) {
+                beforePage = Math.max(1, beforePage - 1); // Show 1 page before the last page
+            }
+        
+            // Special case for the first page
+            if (currentPage === 1) {
+                afterPage = Math.min(totalPages, afterPage + 2); // Show 2 pages after the first page
+            } else if (currentPage === 2) {
+                afterPage = Math.min(totalPages, afterPage + 1); // Show 1 page after the second page
+            }
+        
+            // Create the page numbers
+            for (let plength = beforePage; plength <= afterPage; plength++) {
+                if (plength > totalPages || plength <= 0) continue; // Skip invalid pages
+        
+                active = currentPage === plength ? "active" : ""; // Highlight the current page
+                liTag += `<li class="numb ${active}" onclick="navigateToPage(${plength})"><span>${plength}</span></li>`;
+            }
+        
+            // Last page
+            if (currentPage < totalPages - 1) {
+                if (currentPage < totalPages - 2) {
+                    liTag += `<li class="dots"><span>...</span></li>`;
+                }
+                
+            }
+        
+            // Next button
+            if (currentPage < totalPages) {
+                liTag += `<li class="btn next" onclick="navigateToPage(${currentPage + 1})"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
+            }
+        
+            element.innerHTML = liTag; // Add li tags inside ul tag
+        }
+            
 
-        // Show/hide pagination controls based on current page
-        document.getElementById('prevPage').style.display = currentPage > 1 ? 'inline-block' : 'none';
-        document.getElementById('nextPage').style.display = currentPage < totalPages ? 'inline-block' : 'none';
-
-        // Generate pagination numbers
-        const pageNumbersContainer = document.getElementById('pageNumbers');
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.textContent = i;
-            pageButton.className = 'btn btn-secondary mx-1';
-            pageButton.disabled = (i === currentPage);  // Disable current page button
-
-            // Add click event to load the respective page
-            pageButton.addEventListener('click', function () {
-                window.location.href = `?page=${i}&category=${category_name}`;
-            });
-
-            pageNumbersContainer.appendChild(pageButton);
+        // Navigate to the selected page
+        window.navigateToPage = function (page) {
+            window.location.href = `?page=${page}&category=${category_name}`;
         }
 
-        // Pagination button event listeners
-        document.getElementById('prevPage').addEventListener('click', function () {
-            window.location.href = `?page=${currentPage - 1}&category=${category_name}`;
-        });
-
-        document.getElementById('nextPage').addEventListener('click', function () {
-            window.location.href = `?page=${currentPage + 1}&category=${category_name}`;
-        });
+        // Render the news on page load
+        renderNews(newsList);
+        console.log('Creating pagination');
+        // Create pagination on page load
+        createPagination(totalPages, currentPage);
+        console.log(totalPages,'Pagination created');
     });
 </script>
-
-{% endblock %}
+{% endblock  %}

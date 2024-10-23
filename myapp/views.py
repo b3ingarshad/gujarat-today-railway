@@ -116,7 +116,7 @@ def epaper_view(request):
     epaper_queryset = EpaperDaily.objects.all()
 
     # Pagination
-    items_per_page = 12  # Adjust the number of items per page if needed
+    items_per_page = 1  # Adjust the number of items per page if needed
     paginator = Paginator(epaper_queryset, items_per_page)
     page_number = request.GET.get('page', 1)  # Get current page number from request
     page_obj = paginator.get_page(page_number)
