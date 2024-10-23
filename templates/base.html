@@ -12,9 +12,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
@@ -54,7 +54,7 @@
 	<!-- Custom css -->
 	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/loader.css' %}">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
 
 	<link rel="stylesheet"
@@ -66,24 +66,24 @@
 
 	<script>
 		// Check the saved preference on page load
-		window.onload = function() {
+		window.onload = function () {
 			const sections = document.querySelectorAll('.categories-slide, .top-stories, .banner, .contact-form, .axil-contact-form-block'); // Target the sections
 			const navbar = document.querySelector('.navbar'); // Target the navbar
 			const switchInput = document.getElementById('switch'); // Get the switch input
 			const labels = document.querySelectorAll('label'); // Get all label elements
-	
+
 			// Set initial state of dark mode based on the switch
 			if (switchInput.checked) {
 				document.body.classList.add('dark-mode');
 				navbar.classList.remove('bg-white');
 				navbar.classList.add('dark'); // Add 'dark' class to navbar
-				
+
 				// Change all labels to white text and black background
 				labels.forEach(label => {
 					label.style.color = "white"; // Change label text color to white
 					label.style.background = "black"; // Change label background color to black
 				});
-				
+
 				sections.forEach(section => {
 					section.classList.remove('bg-grey-light-three'); // Remove light background
 					section.classList.add('dark-section-bg'); // Add custom dark background class
@@ -91,20 +91,20 @@
 			} else {
 				navbar.classList.remove('dark'); // Remove 'dark' class from navbar
 				navbar.classList.add('bg-white'); // Add 'bg-white' class to navbar
-				
+
 				// Reset all labels to default colors
 				labels.forEach(label => {
 					label.style.color = ""; // Reset label text color
 					label.style.background = ""; // Reset label background color
 				});
-	
+
 				sections.forEach(section => {
 					section.classList.add('bg-grey-light-three'); // Add light background
 					section.classList.remove('dark-section-bg'); // Remove dark background
 				});
 			}
 		}
-	
+
 		// Toggle dark mode when the user clicks the switch
 		function toggleDarkMode() {
 			const body = document.body;
@@ -112,20 +112,20 @@
 			const navbar = document.querySelector('.navbar'); // Target the navbar
 			const switchInput = document.getElementById('switch'); // Get the switch input
 			const labels = document.querySelectorAll('label'); // Get all label elements
-	
+
 			body.classList.toggle('dark-mode');
-	
+
 			// Toggle background for the specific sections
 			if (body.classList.contains('dark-mode')) {
 				navbar.classList.add('dark'); // Add 'dark' class to navbar
 				navbar.classList.remove('bg-white'); // Remove 'bg-white' class from navbar
-				
+
 				// Change all labels to white text and black background
 				labels.forEach(label => {
 					label.style.color = "white"; // Change label text color to white
 					label.style.background = "black"; // Change label background color to black
 				});
-				
+
 				sections.forEach(section => {
 					section.classList.remove('bg-grey-light-three');
 					section.classList.add('dark-section-bg');
@@ -133,13 +133,13 @@
 			} else {
 				navbar.classList.remove('dark'); // Remove 'dark' class from navbar
 				navbar.classList.add('bg-white'); // Add 'bg-white' class to navbar
-				
+
 				// Reset all labels to default colors
 				labels.forEach(label => {
 					label.style.color = ""; // Reset label text color
 					label.style.background = ""; // Reset label background color
 				});
-				
+
 				sections.forEach(section => {
 					section.classList.add('bg-grey-light-three');
 					section.classList.remove('dark-section-bg');
@@ -147,14 +147,15 @@
 			}
 		}
 	</script>
-	
-	
-	
+
+
+
 	<style>
 		/* The switch - the box around the slider */
-		.bg-darknav{
-			background-color: #121212 ;
+		.bg-darknav {
+			background-color: #121212;
 		}
+
 		.switch {
 			font-size: 17px;
 			position: relative;
@@ -163,14 +164,14 @@
 			height: 1.8em;
 			cursor: pointer;
 		}
-	
+
 		/* Hide default HTML checkbox */
 		.switch input {
 			opacity: 0;
 			width: 0;
 			height: 0;
 		}
-	
+
 		/* The slider */
 		.slider {
 			--background: #20262c;
@@ -184,7 +185,7 @@
 			transition: 0.5s;
 			border-radius: 30px;
 		}
-	
+
 		.slider:before {
 			position: absolute;
 			content: "";
@@ -197,7 +198,7 @@
 			background: var(--background);
 			transition: 0.5s;
 		}
-	
+
 		.decoration {
 			position: absolute;
 			content: "";
@@ -212,8 +213,8 @@
 			box-shadow: -7px 10px 0 #e5f041e6, 8px 15px 0 #e5f041e6, -17px 1px 0 #e5f041e6,
 				-20px 10px 0 #e5f041e6, -7px 23px 0 #e5f041e6, -15px 25px 0 #e5f041e6;
 		}
-	
-		input:checked ~ .decoration {
+
+		input:checked~.decoration {
 			transform: translateX(-20px);
 			width: 7px;
 			height: 7px;
@@ -221,12 +222,12 @@
 			box-shadow: -12px 0 0 white, -6px 0 0 1.6px white, 5px 15px 0 1px white,
 				1px 17px 0 white, 10px 17px 0 white;
 		}
-	
-		input:checked + .slider {
+
+		input:checked+.slider {
 			background-color: #5494de;
 		}
-	
-		input:checked + .slider:before {
+
+		input:checked+.slider:before {
 			transform: translateX(100%);
 			box-shadow: inset 15px -4px 0px 15px #efdf2b, 0 0 10px 0px #efdf2b;
 		}
@@ -247,8 +248,8 @@
 					</div>
 					<!-- End of .side-nav-search-form -->
 				</form>
-				
-				
+
+
 				<!-- End of .side-nav-search-form -->
 				<div class="side-nav-content">
 					<div class="row ">
@@ -296,10 +297,14 @@
 									<div class="contact-social-share m-t-xs-30">
 										<div class="axil-social-title h5">Follow Us</div>
 										<ul class="social-share social-share__with-bg">
-											<li><a href="https://www.facebook.com/gujarattodaydaily" target="_blank"><i class="fab fa-facebook-f" ></i></a></li>
-											<li><a href="https://x.com/gujarattoday" target="_blank"><i class="fab fa-twitter"></i></a></li>
-											<li><a href="https://www.instagram.com/gujarattodaydaily/" target="_blank"><i class="fab fa-instagram"></i></a></li>
-											<li><a href="https://www.youtube.com/channel/UCsYlCmM_grlXQjzUiAPWmEQ" target="_blank"><i class="fab fa-youtube"></i></a></li>
+											<li><a href="https://www.facebook.com/gujarattodaydaily" target="_blank"><i
+														class="fab fa-facebook-f"></i></a></li>
+											<li><a href="https://x.com/gujarattoday" target="_blank"><i
+														class="fab fa-twitter"></i></a></li>
+											<li><a href="https://www.instagram.com/gujarattodaydaily/"
+													target="_blank"><i class="fab fa-instagram"></i></a></li>
+											<li><a href="https://www.youtube.com/channel/UCsYlCmM_grlXQjzUiAPWmEQ"
+													target="_blank"><i class="fab fa-youtube"></i></a></li>
 										</ul>
 									</div>
 									<!-- End of .contact-shsdf -->
@@ -323,13 +328,28 @@
 		<!-- End of .side-nav -->
 		<!-- Header starts -->
 		<header class="page-header">
-			
+			<div class="header-top bg-grey-dark-one">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-lg-8 col-6">
+							<b class="current-date" id="current-date">25 July, 2019</b>
+						
+							<!-- End of .header-top-nav -->
+						</div>
+						<div class="col-lg-4 col-6 text-right">
+							<div id="google_translate_element"></div>
+						</div>
+					</div>
+					<!-- End of .row -->
+				</div>
+				<!-- End of .container -->
+			</div>
 			<!-- End of .header-top -->
 			<nav class="navbar">
-				<div class="container-fluid">
+				<div class="container">
 					<div class="navbar-inner">
-						
-<!-- <button onclick="toggleDarkMode()">Toggle Dark Mode</button> -->
+
+						<!-- <button onclick="toggleDarkMode()">Toggle Dark Mode</button> -->
 						<div class="brand-logo-container">
 							<a href="{% url 'index' %}">
 								{% for logo in logo %}
@@ -349,8 +369,8 @@
 						<div class="navbar-extra-features ml-auto">
 							<form action="/search/" method="GET" class="navbar-search">
 								<div class="search-field">
-									<input type="text" class="navbar-search-field" name="q"
-										placeholder="Search Here..." required>
+									<input type="text" class="navbar-search-field" name="q" placeholder="Search Here..."
+										required>
 									<button class="navbar-search-btn" type="submit"><i
 											class="fal fa-search"></i></button>
 								</div>
@@ -372,9 +392,9 @@
 								<span class="decoration"></span>
 							</label>
 
-							<div id="google_translate_element"></div>
-							  
 							
+
+
 						</div>
 						<!-- End of .navbar-extra-features -->
 						<div class="main-nav-toggler" id="goTopBtn" onclick="goToTop()">
@@ -523,10 +543,14 @@
 							<div class="footer-social-share">
 								<div class="axil-social-title">Find us here</div>
 								<ul class="social-share social-share__with-bg">
-									<li><a href="https://www.facebook.com/gujarattodaydaily" target="_blank"><i class="fab fa-facebook-f" ></i></a></li>
-											<li><a href="https://x.com/gujarattoday" target="_blank"><i class="fab fa-twitter"></i></a></li>
-											<li><a href="https://www.instagram.com/gujarattodaydaily/" target="_blank"><i class="fab fa-instagram"></i></a></li>
-											<li><a href="https://www.youtube.com/channel/UCsYlCmM_grlXQjzUiAPWmEQ" target="_blank"><i class="fab fa-youtube"></i></a></li>
+									<li><a href="https://www.facebook.com/gujarattodaydaily" target="_blank"><i
+												class="fab fa-facebook-f"></i></a></li>
+									<li><a href="https://x.com/gujarattoday" target="_blank"><i
+												class="fab fa-twitter"></i></a></li>
+									<li><a href="https://www.instagram.com/gujarattodaydaily/" target="_blank"><i
+												class="fab fa-instagram"></i></a></li>
+									<li><a href="https://www.youtube.com/channel/UCsYlCmM_grlXQjzUiAPWmEQ"
+											target="_blank"><i class="fab fa-youtube"></i></a></li>
 								</ul>
 							</div>
 						</div>
@@ -567,7 +591,7 @@
 	<!-- Isotope js -->
 	<script src="{% static 'js/vendor/isotope.pkgd.min.js' %}"></script>
 	<!-- Counter up js -->
-	
+
 	<!-- Magnific Popup js -->
 	<script src="{% static 'js/vendor/jquery.magnific-popup.min.js' %}"></script>
 	<!-- Nicescroll js -->
@@ -583,84 +607,99 @@
 	<script src="{% static 'js/fetchApi.js' %}"></script>
 
 	<script src="{% static 'js/vendor/owl.carousel.min.js' %}"></script>
-	
+
 	<script>
 		document.getElementById('currentYear').textContent = new Date().getFullYear();
 	</script>
-	
 
-<script>
-    window.addEventListener('scroll', function() {
-        const navbar = document.querySelector('.navbar');
-        const scrollHeight = window.scrollY;
+	<script>
+        // Function to get the current date in the desired format
+        function getCurrentDate() {
+            const date = new Date(); // Get the current date
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = date.toLocaleDateString('en-US', options); // Format the date
 
-        if (scrollHeight > 300) {
-            if (!navbar.classList.contains('fixed-top')) {
-                navbar.classList.add('fixed-top', 'animate__animated', 'animate__fadeIn');
-            }
-        } else {
-            navbar.classList.remove('fixed-top', 'animate__animated', 'animate__fadeIn');
+            return formattedDate;
         }
-    });
-</script>
 
-<script>
-	// Fetch data from the /api/navbar/ endpoint
-	fetch('/api/navbar/')
-		.then(response => response.json())
-		.then(data => {
-			// Target the UL element where the nav items should be added
-			const navLinksContainer = document.getElementById('nav-links');
+        // Set the current date in the HTML element
+        document.getElementById('current-date').textContent = getCurrentDate();
+    </script>
 
-			// Clear any existing links
-			navLinksContainer.innerHTML = '';
 
-			// Loop through the fetched data and generate the nav links
-			data.forEach(navItem => {
-				const listItem = document.createElement('li');
-				listItem.innerHTML = `<a href="/${navItem.url}">${navItem.name}</a>`;
-				navLinksContainer.appendChild(listItem);
-			});
-		})
-		.catch(error => console.error('Error fetching nav data:', error));
-</script>
+	<script>
+		window.addEventListener('scroll', function () {
+			const navbar = document.querySelector('.navbar');
+			const scrollHeight = window.scrollY;
 
-<script>
-    // Show the button when the user scrolls past 300px
-    window.onscroll = function() {
-        const goTopBtn = document.getElementById('goTopBtn');
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            goTopBtn.style.display = "block";
-        } else {
-            goTopBtn.style.display = "none";
-        }
-    };
+			if (scrollHeight > 300) {
+				if (!navbar.classList.contains('fixed-top')) {
+					navbar.classList.add('fixed-top', 'animate__animated', 'animate__fadeIn');
+				}
+			} else {
+				navbar.classList.remove('fixed-top', 'animate__animated', 'animate__fadeIn');
+			}
+		});
+	</script>
 
-    // Function to scroll to the top
-    function goToTop() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-</script>
+	<script>
+		// Fetch data from the /api/navbar/ endpoint
+		fetch('/api/navbar/')
+			.then(response => response.json())
+			.then(data => {
+				// Target the UL element where the nav items should be added
+				const navLinksContainer = document.getElementById('nav-links');
 
-<script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'en',  // The default language of the page
-            includedLanguages: 'en,gu,hi,ml,ur,ar,mr,bn,te',  // List of languages
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-        }, 'google_translate_element');
-        
-        // Programmatically set the default language to Gujarati
-        setTimeout(function() {
-            var select = document.querySelector('.skiptranslate select');
-            if (select) {
-                select.value = 'en'; // Set to Gujarati
-                select.dispatchEvent(new Event('change')); // Trigger change event
-            }
-        }, 500); // Adjust the timeout if necessary
-    }
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+				// Clear any existing links
+				navLinksContainer.innerHTML = '';
+
+				// Loop through the fetched data and generate the nav links
+				data.forEach(navItem => {
+					const listItem = document.createElement('li');
+					listItem.innerHTML = `<a href="/${navItem.url}">${navItem.name}</a>`;
+					navLinksContainer.appendChild(listItem);
+				});
+			})
+			.catch(error => console.error('Error fetching nav data:', error));
+	</script>
+
+	<script>
+		// Show the button when the user scrolls past 300px
+		window.onscroll = function () {
+			const goTopBtn = document.getElementById('goTopBtn');
+			if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+				goTopBtn.style.display = "block";
+			} else {
+				goTopBtn.style.display = "none";
+			}
+		};
+
+		// Function to scroll to the top
+		function goToTop() {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+	</script>
+
+	<script type="text/javascript">
+		function googleTranslateElementInit() {
+			new google.translate.TranslateElement({
+				pageLanguage: 'en',  // The default language of the page
+				includedLanguages: 'en,gu,hi,ml,ur,ar,mr,bn,te',  // List of languages
+				layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+			}, 'google_translate_element');
+
+			// Programmatically set the default language to Gujarati
+			setTimeout(function () {
+				var select = document.querySelector('.skiptranslate select');
+				if (select) {
+					select.value = 'en'; // Set to Gujarati
+					select.dispatchEvent(new Event('change')); // Trigger change event
+				}
+			}, 500); // Adjust the timeout if necessary
+		}
+	</script>
+	<script type="text/javascript"
+		src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 
 

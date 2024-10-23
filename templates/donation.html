@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Donation | Zakat & Lillah
+{% endblock %}
+
+
+{% block start %}
+
+<!-- Toast container -->
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div id="toast-container" class="toast-container position-fixed
+top-0 end-0 p-3">
+        {% for message in messages %}
+        <div class="toast align-items-center text-bg-{{ message.tags
+}} border-0" role="alert" aria-live="assertive" aria-atomic="true"
+data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white
+me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Banner starts -->
+<section class="banner banner__default bg-grey-light-three">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="post-title-wrapper">
+                    <h2 class="m-b-xs-0 axil-post-title
+hover-line">Zakat & Lillah</h2>
+                </div>
+                <!-- End of .post-title-wrapper -->
+            </div>
+            <!-- End of .col-lg-8 -->
+        </div>
+    </div>
+    <!-- End of .container -->
+</section>
+<!-- End of .banner -->
+
+<div class="axil-about-us section-gap  section-gap-top__with-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <img src="/static/images/donation-upi.webp"
+class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6">
+                <div class="tab-card">
+                    <div class="tab-card-header text-center">
+                        <ul class="nav nav-pills nav-fill" id="myTab"
+role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active"
+id="home-tab" data-bs-toggle="tab" href="#home" role="tab"
+aria-controls="home" aria-selected="true">ZAKAT</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab"
+data-bs-toggle="tab" href="#profile" role="tab"
+aria-controls="profile" aria-selected="false">LILLAH</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <div class="tab-content mt-5" id="myTabContent">
+                        <div class="tab-pane fade show active"
+id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <!-- <h4>Home Content</h4> -->
+                            <p >
+                                <strong>Business Name:</strong> Lokhit
+Prakashan Sarvajanik Trust<br>
+                                <strong>Bank Name:</strong> State Bank
+of India<br>
+                                <strong>IFSC Code:</strong> SBIN0003046<br>
+                                <strong>Account Number:</strong> 10455222046
+                              </p>
+
+                        </div>
+                        <div class="tab-pane fade" id="profile"
+role="tabpanel" aria-labelledby="profile-tab">
+                            <p>
+                                <strong>Business Name:</strong> Lokhit
+Prakashan Sarvajanik Trust<br>
+                                <strong>Bank Account Name:</strong>
+Lokhitprakashan Sarvajanikmtrust<br>
+                                <strong>Bank Name:</strong> Central
+Bank of India<br>
+                                <strong>IFSC Code:</strong> CBIN0282382<br>
+                                <strong>Account Number:</strong> 3243384715
+                              </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of .section-gap -->
+
+
+
+
+{% endblock %}

@@ -381,3 +381,7 @@ def dynamic_page_view(request, template_name, category_name):
         'category_name':category_name
     })
     
+def donation(request):
+    logo = SiteLogo.objects.all()
+    categories = Category.objects.all()
+    return render(request, 'donation.html', {'logo':logo,'categories': categories})

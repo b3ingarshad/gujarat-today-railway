@@ -36,4 +36,5 @@ urlpatterns = [
     path('muslim-freedom-fighters/', lambda request: dynamic_page_view(request, 'categorys-dynamic-page.html', category_name="Muslim Freedom Fighters")),
     path('harmony/', lambda request: dynamic_page_view(request, 'categorys-dynamic-page.html', category_name="Harmony")),
     path('hatred/', lambda request: dynamic_page_view(request, 'categorys-dynamic-page.html', category_name="Hatred")),
+    path('donation/', donation, name='donation'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

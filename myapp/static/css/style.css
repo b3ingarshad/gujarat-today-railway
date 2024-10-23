@@ -6940,7 +6940,7 @@ ul.gallery img {
 }
 @media (max-width: 991px) {
   .header-top {
-    display: none;
+    display: block;
   }
 }
 .header-top li,
@@ -6950,7 +6950,7 @@ ul.gallery img {
   font-size: 1.4rem;
   line-height: 2.4rem;
   color: var(--grey-dark-six);
-  font-weight: var(--s-regular);
+ 
   padding: 0.5rem;
   transition: all 0.3s;
 }
@@ -8577,6 +8577,15 @@ body.dark-mode p {
   height: 30px;
   min-width: 90px;
   max-width: 160px;
-  margin: 20px;
+  margin: 0 !important;
   padding: 4px;
+}
+
+
+/* Donation */
+.nav-pills .nav-link.active{
+  background-color: var(--color-red-one) !important;
+}
+.nav-link{
+  color: #000;
 }
