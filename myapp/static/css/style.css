@@ -1,6 +1,3 @@
-
-
-
 .category-list {
   margin: 0; /* Adjust margin as needed */
 }
@@ -6934,7 +6931,7 @@ ul.gallery img {
 }
 /*--Header top--*/
 .header-top {
-  padding: 0.5rem 0;
+  padding: 1rem 0;
   position: relative;
   z-index: 999;
 }
@@ -6942,10 +6939,12 @@ ul.gallery img {
   .header-top {
     display: block;
   }
+  .top-head-category{
+    display: none !important;
+  }
 }
 .header-top li,
 .header-top .current-date {
-  display: block;
   font-family: var(--secondary-font);
   font-size: 1.4rem;
   line-height: 2.4rem;
@@ -6967,9 +6966,9 @@ ul.gallery img {
 }
 @media (max-width: 767px) {
   .header-top .current-date {
-    display: block;
     width: 100%;
     text-align: left;
+    font-size: 1.3rem !important;
   }
 }
 .header-top__style-two {
@@ -8531,39 +8530,6 @@ address .tel i {
   display: none;
 }
 
-/* Dark mode styles */
-/* Dark mode styles */
-body.dark-mode {
-  background-color: #121212 !important;
-  color: white; /* Default text color */
-}
-
-/* Ensure specific elements also inherit the text color */
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3,
-body.dark-mode p {
-  color: white; /* Ensure headings and paragraphs are white */
-}
-
-/* Dark mode background for the section */
-.dark-section-bg {
-  background-color: #121212; /* Dark background color */
-}
-
-/* Ensure text color for sections in dark mode */
-.dark-section-bg * {
-  color: white; /* Make all text within this section white */
-}
-
-#news-carousel i {
-  color: #000;
-}
-
-.dark-section-bg .btn-link{
-  color: white !important;
-}
-
 .skiptranslate iframe {
   display: none !important;
 }
@@ -8645,3 +8611,10 @@ body.dark-mode p {
 .pagination .btn::before{
   background-color: transparent !important;
 }
+
+ #loading_message {
+        font-size: 14px;
+        color: #666;
+        text-align: center;
+        padding: 10px;
+    }

@@ -15,20 +15,8 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-	<link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
-	<link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
-	<link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
-	<link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
-	<link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
-	<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
-	<link rel="icon" type="image/png" sizes="192x192" href="favicon/android-icon-192x192.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-	<link rel="manifest" href="favicon/manifest.json">
+	<link rel="icon" type="image/jpg" href="/static/images/gt-author.jpg">
+
 	<meta name="msapplication-TileColor" content="#ffffff">
 	<meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
 	<meta name="theme-color" content="#ffffff">
@@ -64,174 +52,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
-	<script>
-		// Check the saved preference on page load
-		window.onload = function () {
-			const sections = document.querySelectorAll('.categories-slide, .top-stories, .banner, .contact-form, .axil-contact-form-block'); // Target the sections
-			const navbar = document.querySelector('.navbar'); // Target the navbar
-			const switchInput = document.getElementById('switch'); // Get the switch input
-			const labels = document.querySelectorAll('label'); // Get all label elements
-
-			// Set initial state of dark mode based on the switch
-			if (switchInput.checked) {
-				document.body.classList.add('dark-mode');
-				navbar.classList.remove('bg-white');
-				navbar.classList.add('dark'); // Add 'dark' class to navbar
-
-				// Change all labels to white text and black background
-				labels.forEach(label => {
-					label.style.color = "white"; // Change label text color to white
-					label.style.background = "black"; // Change label background color to black
-				});
-
-				sections.forEach(section => {
-					section.classList.remove('bg-grey-light-three'); // Remove light background
-					section.classList.add('dark-section-bg'); // Add custom dark background class
-				});
-			} else {
-				navbar.classList.remove('dark'); // Remove 'dark' class from navbar
-				navbar.classList.add('bg-white'); // Add 'bg-white' class to navbar
-
-				// Reset all labels to default colors
-				labels.forEach(label => {
-					label.style.color = ""; // Reset label text color
-					label.style.background = ""; // Reset label background color
-				});
-
-				sections.forEach(section => {
-					section.classList.add('bg-grey-light-three'); // Add light background
-					section.classList.remove('dark-section-bg'); // Remove dark background
-				});
-			}
-		}
-
-		// Toggle dark mode when the user clicks the switch
-		function toggleDarkMode() {
-			const body = document.body;
-			const sections = document.querySelectorAll('.random-posts, .top-stories'); // Target the sections
-			const navbar = document.querySelector('.navbar'); // Target the navbar
-			const switchInput = document.getElementById('switch'); // Get the switch input
-			const labels = document.querySelectorAll('label'); // Get all label elements
-
-			body.classList.toggle('dark-mode');
-
-			// Toggle background for the specific sections
-			if (body.classList.contains('dark-mode')) {
-				navbar.classList.add('dark'); // Add 'dark' class to navbar
-				navbar.classList.remove('bg-white'); // Remove 'bg-white' class from navbar
-
-				// Change all labels to white text and black background
-				labels.forEach(label => {
-					label.style.color = "white"; // Change label text color to white
-					label.style.background = "black"; // Change label background color to black
-				});
-
-				sections.forEach(section => {
-					section.classList.remove('bg-grey-light-three');
-					section.classList.add('dark-section-bg');
-				});
-			} else {
-				navbar.classList.remove('dark'); // Remove 'dark' class from navbar
-				navbar.classList.add('bg-white'); // Add 'bg-white' class to navbar
-
-				// Reset all labels to default colors
-				labels.forEach(label => {
-					label.style.color = ""; // Reset label text color
-					label.style.background = ""; // Reset label background color
-				});
-
-				sections.forEach(section => {
-					section.classList.add('bg-grey-light-three');
-					section.classList.remove('dark-section-bg');
-				});
-			}
-		}
-	</script>
-
-
-
-	<style>
-		/* The switch - the box around the slider */
-		.bg-darknav {
-			background-color: #121212;
-		}
-
-		.switch {
-			font-size: 17px;
-			position: relative;
-			display: inline-block;
-			width: 4.5em;
-			height: 1.8em;
-			cursor: pointer;
-		}
-
-		/* Hide default HTML checkbox */
-		.switch input {
-			opacity: 0;
-			width: 0;
-			height: 0;
-		}
-
-		/* The slider */
-		.slider {
-			--background: #20262c;
-			position: absolute;
-			cursor: pointer;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background-color: var(--background);
-			transition: 0.5s;
-			border-radius: 30px;
-		}
-
-		.slider:before {
-			position: absolute;
-			content: "";
-			height: 1.4em;
-			width: 1.4em;
-			border-radius: 50%;
-			left: 10%;
-			bottom: 15%;
-			box-shadow: inset 8px -4px 0px 0px #ececd9, -4px 1px 4px 0px #dadada;
-			background: var(--background);
-			transition: 0.5s;
-		}
-
-		.decoration {
-			position: absolute;
-			content: "";
-			height: 2px;
-			width: 2px;
-			border-radius: 50%;
-			right: 20%;
-			top: 15%;
-			background: #e5f041e6;
-			backdrop-filter: blur(10px);
-			transition: all 0.5s;
-			box-shadow: -7px 10px 0 #e5f041e6, 8px 15px 0 #e5f041e6, -17px 1px 0 #e5f041e6,
-				-20px 10px 0 #e5f041e6, -7px 23px 0 #e5f041e6, -15px 25px 0 #e5f041e6;
-		}
-
-		input:checked~.decoration {
-			transform: translateX(-20px);
-			width: 7px;
-			height: 7px;
-			background: white;
-			box-shadow: -12px 0 0 white, -6px 0 0 1.6px white, 5px 15px 0 1px white,
-				1px 17px 0 white, 10px 17px 0 white;
-		}
-
-		input:checked+.slider {
-			background-color: #5494de;
-		}
-
-		input:checked+.slider:before {
-			transform: translateX(100%);
-			box-shadow: inset 15px -4px 0px 15px #efdf2b, 0 0 10px 0px #efdf2b;
-		}
-	</style>
 
 </head>
 
@@ -243,7 +63,7 @@
 			<div class="side-nav-inner nicescroll-container">
 				<form action="/search/" method="GET" class="side-nav-search-form">
 					<div class="form-group search-field">
-						<input type="text" class="search-field" name="q" placeholder="Search...">
+						<input type="text" class="search-field" name="q" value="{{ query }}" placeholder="Search...">
 						<button class="side-nav-search-btn" type="submit"><i class="fas fa-search"></i></button>
 					</div>
 					<!-- End of .side-nav-search-form -->
@@ -331,13 +151,23 @@
 			<div class="header-top bg-grey-dark-one">
 				<div class="container">
 					<div class="row align-items-center">
-						<div class="col-lg-8 col-6">
-							<b class="current-date" id="current-date">25 July, 2019</b>
-						
-							<!-- End of .header-top-nav -->
+						<div class="col-lg-10 col-7">
+							<i class="fas fa-calendar mr-2" style="color: #cecece;"> </i>
+							<b class="current-date text-uppercase mr-2" id="current-date"></b> <span
+								class="top-head-category">|</span>
+							<a href="/top-stories/"><b class="current-date text-uppercase p-2 top-head-category">Top
+									Stories
+									<i class="fas fa-fire"></i> </b></a> <span class="top-head-category">|</span>
+							<a href="/trending-news/"><b
+									class="current-date text-uppercase p-2 top-head-category">Trending <i
+										class="fas fa-fire"></i> </b></a>
 						</div>
-						<div class="col-lg-4 col-6 text-right">
-							<div id="google_translate_element"></div>
+
+						<div class="col-lg-2 col-5 text-right">
+							<div id="google_translate_element">
+								<p id="loading_message">Loading
+									translation...</p>
+							</div>
 						</div>
 					</div>
 					<!-- End of .row -->
@@ -345,11 +175,10 @@
 				<!-- End of .container -->
 			</div>
 			<!-- End of .header-top -->
-			<nav class="navbar">
+			<nav class="navbar bg-white">
 				<div class="container">
 					<div class="navbar-inner">
 
-						<!-- <button onclick="toggleDarkMode()">Toggle Dark Mode</button> -->
 						<div class="brand-logo-container">
 							<a href="{% url 'index' %}">
 								{% for logo in logo %}
@@ -369,8 +198,8 @@
 						<div class="navbar-extra-features ml-auto">
 							<form action="/search/" method="GET" class="navbar-search">
 								<div class="search-field">
-									<input type="text" class="navbar-search-field" name="q" placeholder="Search Here..."
-										required>
+									<input type="text" class="navbar-search-field" name="q" value="{{ query }}"
+										placeholder="Search Here..." required>
 									<button class="navbar-search-btn" type="submit"><i
 											class="fal fa-search"></i></button>
 								</div>
@@ -385,16 +214,6 @@
 								<span></span>
 								<span></span>
 							</a>
-
-							<label for="switch" class="switch d-none">
-								<input id="switch" type="checkbox" onchange="toggleDarkMode()" />
-								<span class="slider"></span>
-								<span class="decoration"></span>
-							</label>
-
-							
-
-
 						</div>
 						<!-- End of .navbar-extra-features -->
 						<div class="main-nav-toggler" id="goTopBtn" onclick="goToTop()">
@@ -419,10 +238,6 @@
 
 	{% endblock %}
 
-
-	<!-- <div class="theme-toggle">
-		<button id="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
-	</div> -->
 	<!-- footer starts -->
 	<footer class="page-footer bg-grey-dark-key">
 		<div class="container">
@@ -608,101 +423,9 @@
 
 	<script src="{% static 'js/vendor/owl.carousel.min.js' %}"></script>
 
-	<script>
-		document.getElementById('currentYear').textContent = new Date().getFullYear();
-	</script>
 
-	<script>
-        // Function to get the current date in the desired format
-        function getCurrentDate() {
-            const date = new Date(); // Get the current date
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedDate = date.toLocaleDateString('en-US', options); // Format the date
-
-            return formattedDate;
-        }
-
-        // Set the current date in the HTML element
-        document.getElementById('current-date').textContent = getCurrentDate();
-    </script>
-
-
-	<script>
-		window.addEventListener('scroll', function () {
-			const navbar = document.querySelector('.navbar');
-			const scrollHeight = window.scrollY;
-
-			if (scrollHeight > 300) {
-				if (!navbar.classList.contains('fixed-top')) {
-					navbar.classList.add('fixed-top', 'animate__animated', 'animate__fadeIn');
-				}
-			} else {
-				navbar.classList.remove('fixed-top', 'animate__animated', 'animate__fadeIn');
-			}
-		});
-	</script>
-
-	<script>
-		// Fetch data from the /api/navbar/ endpoint
-		fetch('/api/navbar/')
-			.then(response => response.json())
-			.then(data => {
-				// Target the UL element where the nav items should be added
-				const navLinksContainer = document.getElementById('nav-links');
-
-				// Clear any existing links
-				navLinksContainer.innerHTML = '';
-
-				// Loop through the fetched data and generate the nav links
-				data.forEach(navItem => {
-					const listItem = document.createElement('li');
-					listItem.innerHTML = `<a href="/${navItem.url}">${navItem.name}</a>`;
-					navLinksContainer.appendChild(listItem);
-				});
-			})
-			.catch(error => console.error('Error fetching nav data:', error));
-	</script>
-
-	<script>
-		// Show the button when the user scrolls past 300px
-		window.onscroll = function () {
-			const goTopBtn = document.getElementById('goTopBtn');
-			if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-				goTopBtn.style.display = "block";
-			} else {
-				goTopBtn.style.display = "none";
-			}
-		};
-
-		// Function to scroll to the top
-		function goToTop() {
-			window.scrollTo({ top: 0, behavior: 'smooth' });
-		}
-	</script>
-
-	<script type="text/javascript">
-		function googleTranslateElementInit() {
-			new google.translate.TranslateElement({
-				pageLanguage: 'en',  // The default language of the page
-				includedLanguages: 'en,gu,hi,ml,ur,ar,mr,bn,te',  // List of languages
-				layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-			}, 'google_translate_element');
-
-			// Programmatically set the default language to Gujarati
-			setTimeout(function () {
-				var select = document.querySelector('.skiptranslate select');
-				if (select) {
-					select.value = 'en'; // Set to Gujarati
-					select.dispatchEvent(new Event('change')); // Trigger change event
-				}
-			}, 500); // Adjust the timeout if necessary
-		}
-	</script>
-	<script type="text/javascript"
+	<script type="text/javascript" async
 		src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-
-
 
 </body>
 

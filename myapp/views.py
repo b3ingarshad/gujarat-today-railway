@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.db import IntegrityError
+from datetime import timedelta
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics
@@ -11,6 +12,9 @@ from django.db.models import Q
 from .models import *
 from .serializers import *
 import json
+import calendar
+from datetime import datetime
+import re
 # Create your views here.
 
 def custom_404_view(request, exception):
@@ -116,7 +120,7 @@ def epaper_view(request):
     epaper_queryset = EpaperDaily.objects.all()
 
     # Pagination
-    items_per_page = 1  # Adjust the number of items per page if needed
+    items_per_page = 12  # Adjust the number of items per page if needed
     paginator = Paginator(epaper_queryset, items_per_page)
     page_number = request.GET.get('page', 1)  # Get current page number from request
     page_obj = paginator.get_page(page_number)
@@ -249,33 +253,52 @@ def trending_news_page(request):
         'epaper': epaper,
         'page_obj': page_obj
     })
-    
+  
 def search_news(request):
     logo = SiteLogo.objects.all()
-    query = request.GET.get('q')
+    query = request.GET.get('q', '')
 
     # Get all news objects
     news_queryset = New.objects.all()
     epaper_queryset = EpaperDaily.objects.all()
     lokhitmovement_queryset = Lokhitmovement.objects.all()
-    
+
     if query:
-        # Search in the New model (title, description, author, etc.)
-        news_queryset = news_queryset.filter(
-            Q(title__icontains=query) | 
-            Q(description__icontains=query) | 
-            Q(author__icontains=query) |  # Example: filtering by author
-            Q(category__name__icontains=query)  # Example: filtering by category if it is a ForeignKey
-            # Add more fields as needed
-        )
-        epaper_queryset = epaper_queryset.filter(
-            Q(title__icontains=query) |
-            Q(name__icontains=query)  
-        )
-        lokhitmovement_queryset = lokhitmovement_queryset.filter(
-            Q(title__icontains=query) |
-            Q(name__icontains=query)
-        )
+        try:
+            search_date = datetime.strptime(query, "%d %B %Y").date()
+            # Filter by exact date
+            news_queryset = news_queryset.filter(date=search_date)
+            epaper_queryset = epaper_queryset.filter(uploaded_at__date=search_date)
+            lokhitmovement_queryset = lokhitmovement_queryset.filter(uploaded_at__date=search_date)
+        except ValueError:
+            try:
+                month_number = list(calendar.month_name).index(query.capitalize())  # Get the month number
+                print(f"month_number:{month_number}")
+                if month_number:
+                    # Filter by month only
+                    news_queryset = news_queryset.filter(date__month=month_number)
+                    epaper_queryset = epaper_queryset.filter(uploaded_at__month=month_number)
+                    lokhitmovement_queryset = lokhitmovement_queryset.filter(uploaded_at__month=month_number)
+                else:
+                    raise ValueError
+            except ValueError:
+                news_queryset = news_queryset.filter(
+                    Q(title__icontains=query) | 
+                    Q(date__icontains=query) |
+                    Q(description__icontains=query) | 
+                    Q(author__icontains=query) |
+                    Q(category__name__icontains=query)
+                )
+                epaper_queryset = epaper_queryset.filter(
+                    Q(title__icontains=query) |
+                    Q(uploaded_at__icontains=query) |
+                    Q(name__icontains=query)
+                )
+                lokhitmovement_queryset = lokhitmovement_queryset.filter(
+                    Q(title__icontains=query) |
+                    Q(uploaded_at__icontains=query) |
+                    Q(name__icontains=query)
+                )
 
     news_list = [
         {
@@ -292,46 +315,59 @@ def search_news(request):
         }
         for news in news_queryset
     ]
-    
+
     epaper_list = [
         {
             "id": epaper.pk,
             "title": epaper.title,
             "name": epaper.name,
+            "category":"E Paper",
+            "category_color": "#7D0552",
+            "category_url": "epaper-daily",
             "pdf": epaper.pdf.url if epaper.pdf else None,  # Ensure safe access to the PDF
             "uploaded_at": epaper.uploaded_at.strftime("%Y-%m-%d"),
         }
         for epaper in epaper_queryset
     ]
-    
+
     lokhitmovement_list = [
         {
             "id": lokhitmovement.pk,
             "title": lokhitmovement.title,
+            "category_url": "lokhit-movement",
+            "category":"Lokhit Movement",
+            "category_color": "#473810",
             "name": lokhitmovement.name,
             "pdf": lokhitmovement.pdf.url if lokhitmovement.pdf else None,  # Ensure safe access to the PDF
             "uploaded_at": lokhitmovement.uploaded_at.strftime("%Y-%m-%d"),
         }
         for lokhitmovement in lokhitmovement_queryset
     ]
-    
-    # Combine news and epaper results
-    combined_results = {
-        "news": news_list,
-        "epapers": epaper_list,
-        "lokhitmovement": lokhitmovement_list
-    }
-    
-    # Serialize to JSON
-    combined_results_json = json.dumps(combined_results)
-    no_results = len(news_list) == 0 and len(epaper_list) == 0 and len(lokhitmovement_list) == 0
 
+    # Combine news and epaper results
+    combined_results = []
+    for item in news_list:
+        combined_results.append({'type': 'news', **item})
+
+    for item in epaper_list:
+        combined_results.append({'type': 'epaper', **item})
+
+    for item in lokhitmovement_list:
+        combined_results.append({'type': 'lokhitmovement', **item})
+
+    # Pagination
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(combined_results, 12)  # Show 5 items per page
+    page_obj = paginator.get_page(page_number)
+
+    no_results = len(page_obj) == 0
     # Pass the serialized JSON data to the template
     return render(request, 'search.html', {
-        'combined_results_json': combined_results_json,
+        'page_obj': page_obj,
         'query': query,
         'no_results': no_results,
-        'logo': logo
+        'logo': logo,
+        'combined_results_json': json.dumps(page_obj.object_list)
     })
 
 def about(request):
@@ -344,7 +380,12 @@ def dynamic_page_view(request, template_name, category_name):
     categories = Category.objects.all()
 
     if category_name == "Top Stories":
-        news_queryset = New.objects.all().order_by('-date')
+        # Get the current date and time
+        today = timezone.now()
+        # Calculate the date one week ago
+        one_week_ago = today - timedelta(days=7)
+        # Filter news from the last one week, ordered by date (descending)
+        news_queryset = New.objects.filter(date__gte=one_week_ago).order_by('-date')
         category = None  # No specific category for "Top Stories"
     else:
         # Filter news by the selected category

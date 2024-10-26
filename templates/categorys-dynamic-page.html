@@ -33,12 +33,12 @@
         <button id="nextPage" class="btn btn-primary" style="display: none;">Next &raquo;</button>
     </div>
 {% endif %} -->
-{% if page_obj.paginator.num_pages > 1 %}
+    {% if page_obj.paginator.num_pages > 1 %}
 
-<div class="pagination">
-    <ul> <!--pages or li are comes from javascript --> </ul>
-  </div>
-  {% endif %}
+    <div class="pagination">
+        <ul> <!--pages or li are comes from javascript --> </ul>
+    </div>
+    {% endif %}
 
 </section>
 <script>
@@ -101,58 +101,58 @@
             let active;
             let beforePage = currentPage - 1;
             let afterPage = currentPage + 1;
-        
+
             // Previous button
             if (currentPage > 1) {
                 liTag += `<li class="btn prev" onclick="navigateToPage(${currentPage - 1})"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
             }
-        
+
             // First page
             if (currentPage > 2) {
-              
+
                 if (currentPage > 3) {
                     liTag += `<li class="dots"><span>...</span></li>`;
                 }
             }
-        
+
             // Adjust the range for the current page display
             if (currentPage === totalPages) {
                 beforePage = Math.max(1, beforePage - 2); // Show 2 pages before the last page
             } else if (currentPage === totalPages - 1) {
                 beforePage = Math.max(1, beforePage - 1); // Show 1 page before the last page
             }
-        
+
             // Special case for the first page
             if (currentPage === 1) {
                 afterPage = Math.min(totalPages, afterPage + 2); // Show 2 pages after the first page
             } else if (currentPage === 2) {
                 afterPage = Math.min(totalPages, afterPage + 1); // Show 1 page after the second page
             }
-        
+
             // Create the page numbers
             for (let plength = beforePage; plength <= afterPage; plength++) {
                 if (plength > totalPages || plength <= 0) continue; // Skip invalid pages
-        
+
                 active = currentPage === plength ? "active" : ""; // Highlight the current page
                 liTag += `<li class="numb ${active}" onclick="navigateToPage(${plength})"><span>${plength}</span></li>`;
             }
-        
+
             // Last page
             if (currentPage < totalPages - 1) {
                 if (currentPage < totalPages - 2) {
                     liTag += `<li class="dots"><span>...</span></li>`;
                 }
-                
+
             }
-        
+
             // Next button
             if (currentPage < totalPages) {
                 liTag += `<li class="btn next" onclick="navigateToPage(${currentPage + 1})"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
             }
-        
+
             element.innerHTML = liTag; // Add li tags inside ul tag
         }
-            
+
 
         // Navigate to the selected page
         window.navigateToPage = function (page) {
@@ -164,7 +164,7 @@
         console.log('Creating pagination');
         // Create pagination on page load
         createPagination(totalPages, currentPage);
-        console.log(totalPages,'Pagination created');
+        console.log(totalPages, 'Pagination created');
     });
 </script>
-{% endblock  %}
+{% endblock %}

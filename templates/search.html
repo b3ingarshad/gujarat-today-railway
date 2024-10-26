@@ -1,16 +1,16 @@
-
 {% extends 'base.html' %}
-    {% block title %}
-        Search
-    {% endblock %}
-{% block start %}
 
+{% block title %}
+    Search
+{% endblock %}
+
+{% block start %}
 <section class="banner banner__default bg-grey-light-three">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-12">
                 <div class="post-title-wrapper">
-                    <h2 class="m-b-xs-0 axil-post-title hover-line">Search : "{{ query }}"</h2>
+                    <h2 class="m-b-xs-0 axil-post-title hover-line">Search: "{{ query }}"</h2>
                 </div>
             </div>
         </div>
@@ -21,55 +21,92 @@
     <div class="container">
         <div id="searchContainer" class="row">
             <!-- News results will be inserted here -->
-             
         </div>
+
+        {% if page_obj.paginator.num_pages > 1 %}
+        <div class="pagination">
+            <ul> <!-- pages or li come from javascript --> </ul>
+        </div>
+        {% endif %}
     </div>
 </section>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchContainer = document.getElementById('searchContainer');
-
-        // Clear existing content
-        searchContainer.innerHTML = '';
+        const element = document.querySelector(".pagination ul");
+        const currentPage = parseInt('{{ page_obj.number }}');
+        
+        const totalPages = parseInt('{{ page_obj.paginator.num_pages }}');
 
         // Parse the JSON data passed from the Django view
         const combined_results = {{ combined_results_json|safe }};
-        const news_results = combined_results.news;
-        const epaper_results = combined_results.epapers;
-        const lokhitmovement_results = combined_results.lokhitmovement;
-        // Check if there are no results
-        if (news_results.length === 0 && epaper_results.length === 0 && lokhitmovement_results.length === 0) {
-            searchContainer.innerHTML = `
-                <div class="col-lg-12">
-                    <img src="/static/images/no-result.png" class="img-fluid" alt="">
-                </div>
-            `;
-        } else {
-            // Loop through each news result
-            news_results.forEach(result => {
-                let articleHTML = `
+
+        function renderNews(combined_results) {
+            const searchContainer = document.getElementById('searchContainer');
+           
+            searchContainer.innerHTML = '';
+            const categorizedResults = {
+                news: [],
+                epapers: [],
+                lokhitmovement: []
+            };
+
+            // Categorize the results
+            combined_results.forEach(item => {
+                if (item.type === 'news') {
+                    categorizedResults.news.push(item);
+                } else if (item.type === 'epaper') {
+                    categorizedResults.epapers.push(item);
+                } else if (item.type === 'lokhitmovement') {
+                    categorizedResults.lokhitmovement.push(item);
+                }
+            });
+
+            const { news: news_results, epapers: epaper_results, lokhitmovement: lokhitmovement_results } = categorizedResults;
+
+            if (!news_results.length && !epaper_results.length && !lokhitmovement_results.length) {
+                searchContainer.innerHTML = `
+                    <div class="col-lg-12">
+                        <img src="/static/images/no-result.png" class="img-fluid" alt="">
+                    </div>
+                `;
+            } else {
+                renderResults(news_results, 'news', '/news/');
+                renderResults(epaper_results, 'epaper', '/epaper-daily');
+                renderResults(lokhitmovement_results, 'lokhitmovement', '/lokhit-movement');
+            }
+        }
+
+        function renderResults(results, type, baseUrl) {
+            const searchContainer = document.getElementById('searchContainer');
+            results.forEach(result => {
+                const articleDate = new Date(result.date || result.uploaded_at);
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                const formattedDate = articleDate.toLocaleDateString('en-US', options);
+
+                let html = `
                     <div class="col-lg-4">
                         <div class="axil-img-container m-b-xs-30">
-                            <a href="/news/${result.id}" class="d-block">
-                                <img src="${result.image || '/static/images/default_image.png'}" alt="${result.title}" class="w-100">
+                            <a href="${type === 'news' ? baseUrl + result.id : result.pdf}" class="d-block" target="${type === 'news' ? '' : '_blank'}">
+                                
+                                <img src="${result.image || '/static/images/gt-epaper-daily.jpg'}" alt="${result.title}" class="w-100">
                                 <div class="grad-overlay"></div>
                             </a>
                             <div class="media post-block position-absolute">
                                 <div class="media-body">
                                     <div class="post-cat-group m-b-xs-10">
-                                        <a href="/${result.category_url}" class="post-cat cat-btn " style="background-color: ${result.category_color};">
+                                        <a href="/${result.category_url}" class="post-cat cat-btn" style="background-color: ${result.category_color};">
                                             ${result.category}
                                         </a>
                                     </div>
                                     <div class="axil-media-bottom">
                                         <h3 class="axil-post-title hover-line">
-                                            <a href="/news/${result.id}">${result.title}</a>
+                                            <a href="${type === 'news' ? baseUrl + result.id : "http://127.0.0.1:8000" + result.pdf}" target="${type === 'news' ? '' : '_blank'}">${result.title}</a>
                                         </h3>
                                         <div class="post-metas">
                                             <ul class="list-inline">
-                                                <li>By <a href="#" class="post-author">${result.author}</a></li>
-                                                <li><i class="dot">.</i>${result.date}</li>
+                                                <li>By <a href="#" class="post-author">${result.author || 'Gujarat Today'}</a></li>
+                                                <li><i class="dot">.</i>${formattedDate}</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -78,104 +115,80 @@
                         </div>
                     </div>
                 `;
-                searchContainer.innerHTML += articleHTML;
+                searchContainer.innerHTML += html;
             });
-
-            // Loop through each epaper result
-            epaper_results.forEach(result => {
-                let epaperHTML = `
-
-
-                 <div class="col-lg-4">
-                <div class="axil-img-container m-b-xs-30">
-                    <a href="${result.pdf}" class="d-block" target="_blank">
-                        {% load static %}
-                        <img src="{% static 'images/gt-epaper-daily.jpg' %}" alt="ePaper PDF" class="w-100">
-                        <div class="grad-overlay"></div>
-                    </a>
-                    <div class="media post-block position-absolute">
-                         <div class="media post-block position-absolute">
-                                <div class="media-body">
-                                    <div class="post-cat-group m-b-xs-10">
-                                        <a href="/epaper-daily" class="post-cat cat-btn " style="background-color: #7D0552;">
-                                            E Paper
-                                        </a>
-                                    </div>
-                                    <div class="axil-media-bottom">
-                                        <h3 class="axil-post-title hover-line">
-                                            <a href="http://127.0.0.1:8000${result.pdf}" target="_blank">${result.title}</a>
-                                        </h3>
-                                        <div class="post-metas">
-                                            <ul class="list-inline">
-                                                <li>By <a href="#" class="post-author">Gujarat Today</a></li>
-                                                <li><i class="dot">.</i>${result.uploaded_at}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        
-                    </div>
-                </div>
-            </div>
-
-                `;
-                searchContainer.innerHTML += epaperHTML;
-            });
-
-
-
-            lokhitmovement_results.forEach(result => {
-                let lokhitmovementHTML = `
-
-
-                 <div class="col-lg-4">
-                <div class="axil-img-container m-b-xs-30">
-                    <a href="${result.pdf}" class="d-block" target="_blank">
-                        {% load static %}
-                        <img src="{% static 'images/gt-epaper-daily.jpg' %}" alt="ePaper PDF" class="w-100">
-                        <div class="grad-overlay"></div>
-                    </a>
-                    <div class="media post-block position-absolute">
-                         <div class="media post-block position-absolute">
-                                <div class="media-body">
-                                    <div class="post-cat-group m-b-xs-10">
-                                        <a href="/lokhit-movement" class="post-cat cat-btn " style="background-color: #473810;">
-                                            Lokhit Movement
-                                        </a>
-                                    </div>
-                                    <div class="axil-media-bottom">
-                                        <h3 class="axil-post-title hover-line">
-                                            <a href="http://127.0.0.1:8000${result.pdf}" target="_blank">${result.title}</a>
-                                        </h3>
-                                        <div class="post-metas">
-                                            <ul class="list-inline">
-                                                <li>By <a href="#" class="post-author">Gujarat Today</a></li>
-                                                <li><i class="dot">.</i>${result.uploaded_at}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        
-                    </div>
-                </div>
-            </div>
-
-                `;
-                searchContainer.innerHTML += lokhitmovementHTML;
-            });
-
-
-
-
         }
+
+        function createPagination(totalPages, currentPage) {
+            element.innerHTML = ''; // Clear existing pagination
+            let liTag = '';
+            let active;
+            let beforePage = currentPage - 1;
+            let afterPage = currentPage + 1;
+
+            // Previous button
+            if (currentPage > 1) {
+                liTag += `<li class="btn prev" onclick="navigateToPage(${currentPage - 1})"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
+            }
+
+            // First page
+            if (currentPage > 2) {
+                if (currentPage > 3) {
+                    liTag += `<li class="dots"><span>...</span></li>`;
+                }
+            }
+
+            // Adjust the range for the current page display
+            if (currentPage === totalPages) {
+                beforePage = Math.max(1, beforePage - 2); // Show 2 pages before the last page
+            } else if (currentPage === totalPages - 1) {
+                beforePage = Math.max(1, beforePage - 1); // Show 1 page before the last page
+            }
+
+            // Special case for the first page
+            if (currentPage === 1) {
+                afterPage = Math.min(totalPages, afterPage + 2); // Show 2 pages after the first page
+            } else if (currentPage === 2) {
+                afterPage = Math.min(totalPages, afterPage + 1); // Show 1 page after the second page
+            }
+
+            // Create the page numbers
+            for (let plength = beforePage; plength <= afterPage; plength++) {
+                if (plength > totalPages || plength <= 0) continue; // Skip invalid pages
+
+                active = currentPage === plength ? "active" : ""; // Highlight the current page
+                liTag += `<li class="numb ${active}" onclick="navigateToPage(${plength})"><span>${plength}</span></li>`;
+            }
+
+            // Last page
+            if (currentPage < totalPages - 1) {
+                if (currentPage < totalPages - 2) {
+                    liTag += `<li class="dots"><span>...</span></li>`;
+                }
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                liTag += `<li class="btn next" onclick="navigateToPage(${currentPage + 1})"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
+            }
+
+            element.innerHTML = liTag; // Add li tags inside ul tag
+        }
+
+        window.navigateToPage = function(page) {
+            const searchItem = "{{ query }}";
+            const searchParam = searchItem ? `&q=${encodeURIComponent(searchItem)}` : ''; // 
+            const newUrl = `?page=${page}${searchParam}`;
+            window.location.href = newUrl; // Navigate to the new URL
+        }
+
+        // Render the news on page load
+        renderNews(combined_results);
+        console.log('Creating pagination');
+        // Create pagination on page load
+        createPagination(totalPages, currentPage);
+        console.log(totalPages, 'Pagination created');
     });
 </script>
-
 
 {% endblock %}

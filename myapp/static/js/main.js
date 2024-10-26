@@ -27,8 +27,6 @@
 			NEWS._clickDoc();
 			NEWS._click();
 			NEWS.menuItemAnim();
-			NEWS.owl();
-		
 			NEWS.magnificPopup();
 			NEWS.niceScrollInit();
 			NEWS.yScrollInit();
@@ -103,7 +101,7 @@
 								.animate({
 									opacity: "1",
 									top: '0'
-								}, 300);
+								}, 100);
 						});
 					}, 800);
 				}
@@ -228,8 +226,8 @@
 			NEWS.c();
 		},
 
-		b: function (e) {},
-		c: function (e) {},
+		b: function (e) { },
+		c: function (e) { },
 		isIE: function () {
 			var ua = navigator.userAgent;
 			var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
@@ -242,72 +240,6 @@
 
 				$(this).find(">a").attr('data-txt', txt);
 			});
-		},
-
-		owl: function () {
-			var _owlContainer = $('.owl-carousel:not(.owl-synced)'),
-				_owlCatContainer = $('.category-carousel .owl-carousel'),
-				_customPrevBtn = '.custom-owl-prev',
-				_customNextBtn = '.custom-owl-next';
-
-			if (_owlContainer.length) {
-				_owlContainer.each(function () {
-
-					var _defaults = {
-						loop: true,
-						margin: 10,
-						responsiveClass: true,
-						items: 1,
-						autoplay: true,
-						nav: false,
-						dots: false,
-						animateIn: false,
-						animateOut: false
-					}
-					//vars
-					var _loop = $(this)[0].hasAttribute("data-owl-loop") ? $(this).data('owl-loop') : _defaults.loop,
-						_items = $(this)[0].hasAttribute("data-owl-items") ? $(this).data('owl-items') : _defaults.items,
-						_dots = $(this)[0].hasAttribute("data-owl-dots") ? $(this).data('owl-dots') : _defaults.dots,
-						_nav = $(this)[0].hasAttribute("data-owl-nav") ? $(this).data('owl-nav') : _defaults.nav,
-						_margin = $(this)[0].hasAttribute("data-owl-margin") ? $(this).data('owl-margin') : _defaults.margin,
-						_animateIn = $(this)[0].hasAttribute("data-owl-animate-in") ? $(this).data('owl-animate-in') : _defaults.animateIn,
-						_animateOut = $(this)[0].hasAttribute("data-owl-animate-out") ? $(this).data('owl-animate-out') : _defaults.animateOut,
-						_autoplay = $(this)[0].hasAttribute("data-owl-autoplay") ? $(this).data('owl-autoplay') : _defaults.autoplay;
-
-					if (NEWS.isIE()) {
-						_animateIn = false;
-						_animateOut = false;
-					}
-
-					//init
-					_owlContainer.owlCarousel({
-						loop: _loop,
-						margin: _margin,
-						responsiveClass: true,
-						items: _items,
-						autoplay: _autoplay,
-						nav: _nav,
-						dots: _dots,
-						animateIn: _animateIn,
-						animateOut: _animateOut,
-						navText: ['<i class="feather icon-chevron-left"></i>', '<i class="feather icon-chevron-right"></i>']
-					});
-
-					// Trigger counter when slide changes
-					if (_owlCatContainer.length) {
-
-						// Go to the previous item
-						NEWS._document.on('click', _customPrevBtn, function () {
-							_owlCatContainer.trigger('prev.owl.carousel', [300]);
-						});
-
-						// Go to the next item
-						NEWS._document.on('click', _customNextBtn, function () {
-							_owlCatContainer.trigger('next.owl.carousel', [300]);
-						});
-					}
-				});
-			}
 		},
 
 		slickSync: function () {
@@ -360,25 +292,25 @@
 					centerPadding: "0",
 					autoplaySpeed: 2000,
 					responsive: [{
-							breakpoint: 1024,
-							settings: {
-								slidesToShow: _items
-							}
-						},
-						{
-							breakpoint: 991,
-							settings: {
-								slidesToShow: 1,
-								centerMode: false
-							}
-						},
-						{
-							breakpoint: 767,
-							settings: {
-								slidesToShow: 1,
-								centerMode: false
-							}
+						breakpoint: 1024,
+						settings: {
+							slidesToShow: _items
 						}
+					},
+					{
+						breakpoint: 991,
+						settings: {
+							slidesToShow: 1,
+							centerMode: false
+						}
+					},
+					{
+						breakpoint: 767,
+						settings: {
+							slidesToShow: 1,
+							centerMode: false
+						}
+					}
 						// You can unslick at a given breakpoint now by adding:
 						// settings: "unslick"
 						// instead of a settings object
@@ -397,7 +329,7 @@
 			}
 		},
 
-		
+
 
 		perfectSquare: function () {
 			var _square = $('.perfect-square');
@@ -430,7 +362,7 @@
 				_filterBtnGrp = $('.axil-filter-button-group');
 
 			if (_axilIsoGrid.length) {
-				_axilIsoGrid.each(function () {});
+				_axilIsoGrid.each(function () { });
 				var $grid = _axilIsoGrid.isotope({
 					// options
 					itemSelector: '.iso-grid-item',
@@ -586,6 +518,107 @@
 		}
 	};
 	NEWS.i();
-	
+
 })(window, document, jQuery);
 
+// Custom JS For App
+
+document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+// Function to get the current date in the desired format
+function getCurrentDate() {
+	const date = new Date(); // Get the current date
+
+	// Array of abbreviated day names
+	const abbreviatedDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+	const dayName = abbreviatedDays[date.getDay()]; // Get abbreviated day name
+
+	const options = {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
+	};
+	const formattedDate = date.toLocaleDateString('en-US', options);
+	// Format the date
+
+	// Combine the abbreviated day name with the formatted date
+	return `${dayName}, ${formattedDate}`;
+}
+
+// Set the current date in the HTML element
+document.getElementById('current-date').textContent = getCurrentDate();
+
+// Scroll Navbar Fixed
+window.addEventListener('scroll', function () {
+	const navbar = document.querySelector('.navbar');
+	const scrollHeight = window.scrollY;
+
+	if (scrollHeight > 300) {
+		if (!navbar.classList.contains('fixed-top')) {
+			navbar.classList.add('fixed-top', 'animate__animated',
+				'animate__fadeIn');
+		}
+	} else {
+		navbar.classList.remove('fixed-top', 'animate__animated',
+			'animate__fadeIn');
+	}
+});
+
+// Fetch data from the /api/navbar/ endpoint
+fetch('/api/navbar/')
+	.then(response => response.json())
+	.then(data => {
+		// Target the UL element where the nav items should be added
+		const navLinksContainer = document.getElementById('nav-links');
+
+		// Clear any existing links
+		navLinksContainer.innerHTML = '';
+
+		// Loop through the fetched data and generate the nav links
+		data.forEach(navItem => {
+			const listItem = document.createElement('li');
+			listItem.innerHTML = `<a href="/${navItem.url}">${navItem.name}</a>`;
+			navLinksContainer.appendChild(listItem);
+		});
+	})
+	.catch(error => console.error('Error fetching nav data:', error));
+
+
+// Show the button when the user scrolls past 300px
+window.onscroll = function () {
+	const goTopBtn = document.getElementById('goTopBtn');
+	if (document.body.scrollTop > 300 ||
+		document.documentElement.scrollTop > 300) {
+		goTopBtn.style.display = "block";
+	} else {
+		goTopBtn.style.display = "none";
+	}
+};
+
+// Function to scroll to the top
+function goToTop() {
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Google Translater
+function googleTranslateElementInit() {
+	new google.translate.TranslateElement({
+		pageLanguage: 'en',
+		includedLanguages: 'en,gu,hi,ml,ur,ar,mr,bn,te',
+		layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+	}, 'google_translate_element');
+
+	// Hide the loading message once Google Translate is ready
+	document.getElementById('loading_message').style.display = 'none';
+
+	// Set default language to Gujarati after Google Translate loads
+	setTimeout(function () {
+		var select = document.querySelector('.skiptranslate select');
+		if (select) {
+			select.value = 'gu'; // Set Gujarati as selected language
+			select.dispatchEvent(new Event('change')); // Trigger change event to apply translation
+		} else {
+			console.error("Language selector not found");
+		}
+	}, 500); // Increase timeout to 500 ms for reliability
+}

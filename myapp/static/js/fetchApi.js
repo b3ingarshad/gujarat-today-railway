@@ -100,7 +100,6 @@ function truncateTitle(title, maxLength = 40) {
     if (title.length > maxLength) {
         return title.slice(0, maxLength) + '...';
     }
-    console.log("Saiyed");
     return title;
 }
 
@@ -222,7 +221,7 @@ fetch('/api/news/')
         // Get current date and calculate the date 7 days ago
         const today = new Date();
         const last7DaysDate = new Date();
-        last7DaysDate.setDate(today.getDate() - 7);
+        last7DaysDate.setDate(today.getDate() - 8);
 
         // Filter news items to only include those from the last 7 days
         const recentNews = data.filter(newsItem => {
@@ -325,7 +324,6 @@ fetch('/api/news/')
             if (title.length > maxLength) {
                 return title.slice(0, maxLength) + '...';
             }
-            console.log("Saiyed");
             return title;
         }
 
@@ -385,7 +383,6 @@ document.getElementById('load-more-btn').addEventListener('click', function () {
         if (title.length > maxLength) {
             return title.slice(0, maxLength) + '...';
         }
-        console.log("Saiyed");
         return title;
     }
 
@@ -407,7 +404,6 @@ document.getElementById('load-more-btn').addEventListener('click', function () {
         .then(data => {
             const newsContainer = document.getElementById('popular-news-container');
             data.news.forEach(item => {
-                console.log(data.news, "data.news");
 
                 const newsItem = document.createElement('div');
                 newsItem.className = 'col-lg-6 news-item';
