@@ -25,14 +25,7 @@
             <!-- Fetched news items will be inserted here dynamically -->
         </div>
     </div>
-    <!-- Pagination controls -->
-    <!-- {% if page_obj.paginator.count > 12 %} 
-    <div id="paginationControls" class="text-center mt-4">
-        <button id="prevPage" class="btn btn-primary" style="display: none;">&laquo; Previous</button>
-        <span id="pageNumbers" class="mx-2"></span>
-        <button id="nextPage" class="btn btn-primary" style="display: none;">Next &raquo;</button>
-    </div>
-{% endif %} -->
+    
     {% if page_obj.paginator.num_pages > 1 %}
 
     <div class="pagination">
@@ -54,6 +47,14 @@
         function renderNews(newsList) {
             const topDynamicPageOfCategory = document.getElementById('dynamicPageOfCategory');
             topDynamicPageOfCategory.innerHTML = '';  // Clear the container
+
+            if (newsList.length === 0) {
+                topDynamicPageOfCategory.innerHTML = '<p>There is no news available.</p>';
+                return;
+            }
+            else{
+
+           
 
             newsList.forEach(article => {
                 const articleDate = new Date(article.date);
@@ -93,7 +94,7 @@
                 topDynamicPageOfCategory.innerHTML += articleHTML;
             });
         }
-
+    }
         // Function to create pagination
         function createPagination(totalPages, currentPage) {
             element.innerHTML = ''; // Clear existing pagination

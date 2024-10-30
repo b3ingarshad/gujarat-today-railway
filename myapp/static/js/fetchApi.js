@@ -35,7 +35,7 @@ fetch('/api/navbar/')
         data.forEach((link, index) => {
             const listItem = document.createElement('li');
             const anchor = document.createElement('a');
-            anchor.href =  link.url.startsWith('/') ? link.url : `/${link.url}`;
+            anchor.href = link.url.startsWith('/') ? link.url : `/${link.url}`;
             anchor.textContent = link.name;
 
             if (index < maxItems) {
@@ -63,7 +63,7 @@ fetch('/api/navbar/')
     })
     .catch(error => {
         console.error('Error fetching navbar links:', error);
-         // Show 404 page on error
+        // Show 404 page on error
     })
     .finally(() => {
         // Delay hiding the loader for 3 seconds
@@ -132,7 +132,7 @@ fetch('/api/topnews/')
                                  <div class="post-metas" style="padding: 10px 0;">
                                     <ul class="list-inline">
                                         <li>By <a href="#" class="post-author">${newsItem.author}</a></li>
-                                        <li><i class="dot">.</i>${ formatDate(newsItem.date) }</li>  
+                                        <li><i class="dot">.</i>${formatDate(newsItem.date)}</li>  
                                     </ul>
                                  </div>
                             </div>
@@ -163,7 +163,7 @@ fetch('/api/topnews/')
                                             <div class="post-metas">
                                                 <ul class="list-inline">
                                                     <li>By <a href="#" class="post-author">${newsItem.author}</a></li>
-                                                   <li><i class="dot">.</i> ${ formatDate(newsItem.date) }</li>
+                                                   <li><i class="dot">.</i> ${formatDate(newsItem.date)}</li>
                                         
                                                 </ul>
                                             </div>
@@ -203,7 +203,7 @@ fetch('/api/topnews/')
     })
     .catch(error => {
         console.error('Error fetching news links:', error);
-         // Show 404 page on error
+        // Show 404 page on error
     })
     .finally(() => {
         // Delay hiding the loader for 3 seconds
@@ -232,93 +232,86 @@ fetch('/api/news/')
         // Check if there is enough recent news
         if (recentNews.length === 0) {
             sectionNewsContainer.innerHTML = '<p>No recent news found.</p>';
-            return;
-        }
+        } else {
+            // Handle the first news item
+            const firstNews = recentNews[0];
+            const secondAndThirdNews = recentNews.slice(1, 3);  // Get the second and third news items
 
-        // Handle the first news item
-        const firstNews = recentNews[0];
-        const secondAndThirdNews = recentNews.slice(1, 3);  // Get the second and third news items
-
-        // HTML for the first large news item
-        let firstNewsHTML = `
-        <div class="col-lg-8">
-            <div class="axil-img-container m-b-xs-30 ">
-                <a href="/news/${firstNews.id}" class="d-block">
-                    <img src="${firstNews.image}" alt="${firstNews.title}" class="w-100">
-                    <div class="grad-overlay"></div>
-                </a>
-                <div class="media post-block position-absolute">
-                    <div class="media-body media-body__big">
-                        <div class="post-cat-group m-b-xs-10">
-                            <a href="${firstNews.category_url}" class="post-cat cat-btn " style="background-color: ${firstNews.category_color};">
-                                ${firstNews.category}
-                            </a>
-                        </div>
-                        <div class="axil-media-bottom">
-                            <h3 class="axil-post-title hover-line hover-line">
-                                <a href="/news/${firstNews.id}">${truncateTitle(firstNews.title)}</a>
-                            </h3>
-                            <div class="post-metas">
-                                <ul class="list-inline">
-                                    <li>By <a href="#" class="post-author">${firstNews.author}</a></li>
-                                    <li><i class="dot">.</i> ${formatDate(firstNews.date)}</li>
-                                    
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-
-        sectionNewsContainer.innerHTML += firstNewsHTML;
-
-        // HTML for the second and third news items, grouped in one col-lg-4
-        let secondThirdNewsHTML = `
-        <div class="col-lg-4">
-            ${secondAndThirdNews.map(newsItem => `
+            // HTML for the first large news item
+            let firstNewsHTML = `
+            <div class="col-lg-8">
                 <div class="axil-img-container m-b-xs-30 ">
-                    <a href="/news/${newsItem.id}" class="d-block">
-                        <img src="${newsItem.image}" alt="${newsItem.title}" class="w-100">
+                    <a href="/news/${firstNews.id}" class="d-block">
+                        <img src="${firstNews.image}" alt="${firstNews.title}" class="w-100">
                         <div class="grad-overlay"></div>
                     </a>
                     <div class="media post-block position-absolute">
-                        <div class="media-body">
+                        <div class="media-body media-body__big">
                             <div class="post-cat-group m-b-xs-10">
-                                <a href="${newsItem.category_url}" class="post-cat cat-btn" style="background-color: ${newsItem.category_color};">
-                                    ${newsItem.category}
+                                <a href="${firstNews.category_url}" class="post-cat cat-btn" style="background-color: ${firstNews.category_color};">
+                                    ${firstNews.category}
                                 </a>
                             </div>
                             <div class="axil-media-bottom">
                                 <h3 class="axil-post-title hover-line hover-line">
-                                    <a href="/news/${newsItem.id}">${truncateTitle(newsItem.title)}</a>
+                                    <a href="/news/${firstNews.id}">${truncateTitle(firstNews.title)}</a>
                                 </h3>
                                 <div class="post-metas">
                                     <ul class="list-inline">
-                                        <li>By <a href="#" class="post-author">${newsItem.author}</a></li>
-                                        <li><i class="dot">.</i>${formatDate(newsItem.date)}</li>
-                                       
+                                        <li>By <a href="#" class="post-author">${firstNews.author}</a></li>
+                                        <li><i class="dot">.</i> ${formatDate(firstNews.date)}</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            `).join('')}
-        </div>`;
+            </div>`;
 
-        sectionNewsContainer.innerHTML += secondThirdNewsHTML;
+            sectionNewsContainer.innerHTML += firstNewsHTML;
 
+            // HTML for the second and third news items, grouped in one col-lg-4
+            let secondThirdNewsHTML = `
+            <div class="col-lg-4">
+                ${secondAndThirdNews.map(newsItem => `
+                    <div class="axil-img-container m-b-xs-30 ">
+                        <a href="/news/${newsItem.id}" class="d-block">
+                            <img src="${newsItem.image}" alt="${newsItem.title}" class="w-100">
+                            <div class="grad-overlay"></div>
+                        </a>
+                        <div class="media post-block position-absolute">
+                            <div class="media-body">
+                                <div class="post-cat-group m-b-xs-10">
+                                    <a href="${newsItem.category_url}" class="post-cat cat-btn" style="background-color: ${newsItem.category_color};">
+                                        ${newsItem.category}
+                                    </a>
+                                </div>
+                                <div class="axil-media-bottom">
+                                    <h3 class="axil-post-title hover-line hover-line">
+                                        <a href="/news/${newsItem.id}">${truncateTitle(newsItem.title)}</a>
+                                    </h3>
+                                    <div class="post-metas">
+                                        <ul class="list-inline">
+                                            <li>By <a href="#" class="post-author">${newsItem.author}</a></li>
+                                            <li><i class="dot">.</i>${formatDate(newsItem.date)}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>`;
 
-        // Trending API
+            sectionNewsContainer.innerHTML += secondThirdNewsHTML;
+        }
 
+        // Trending API code block (runs regardless of recentNews data)
         const trendingNewsContainer = document.getElementById('trendingNewsContainer');
         trendingNewsContainer.innerHTML = ''; // Clear existing content
 
-
         // Keep track of the number of trending articles added
         let trendingCount = 0;
-
 
         function truncateTitleTrending(title, maxLength = 60) {
             if (title.length > maxLength) {
@@ -339,7 +332,7 @@ fetch('/api/news/')
                             </a>
                             <div class="media-body">
                                 <div class="post-cat-group m-b-xs-10">
-                                    <a href="${article.category_url}" class="post-cat cat-btn " style="background-color: ${article.category_color};">
+                                    <a href="${article.category_url}" class="post-cat cat-btn" style="background-color: ${article.category_color};">
                                         ${article.category}
                                     </a>
                                 </div>
@@ -363,22 +356,21 @@ fetch('/api/news/')
                 // Increment the count of trending articles added
                 trendingCount++;
             }
-        })
+        });
     })
     .catch(error => {
         console.error('Error fetching news links:', error);
-         
     })
     .finally(() => {
-        // Delay hiding the loader for 3 seconds
         setTimeout(hideLoader);
     });
+
 
 
 // Load More News Button 
 document.getElementById('load-more-btn').addEventListener('click', function () {
     const nextPage = this.getAttribute('data-next-page');
-    
+
     function truncateTitlePopular(title, maxLength = 60) {
         if (title.length > maxLength) {
             return title.slice(0, maxLength) + '...';
@@ -427,9 +419,9 @@ document.getElementById('load-more-btn').addEventListener('click', function () {
                     </div>
                 </div>
             `;
-            document.getElementById('loader').style.display = 'none';
-            newsContainer.appendChild(newsItem);
-             
+                document.getElementById('loader').style.display = 'none';
+                newsContainer.appendChild(newsItem);
+
             });
 
             // Update the Load More button
@@ -441,7 +433,7 @@ document.getElementById('load-more-btn').addEventListener('click', function () {
         })
         .catch(error => {
             console.error('Error fetching news links:', error);
-             // Show 404 page on error
+            // Show 404 page on error
         })
         .finally(() => {
             // Delay hiding the loader for 3 seconds
